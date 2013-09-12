@@ -28,4 +28,24 @@ class ListSpec extends Specification {
       List.drop(Nil, 2) must_== Nil
     }
   }
+
+  "tail" should {
+    "drop the first element" in {
+      List.tail(List(1,2)) must_== List(2)
+    }
+    "return an empty list when there is only one element" in {
+      List.tail(List(1)) must_== Nil
+    }
+    "return an empty list when the list is empty" in {
+      List.tail(Nil) must_== Nil
+    }
+  }
+
+  "setHead" should {
+    "replace first element with new value" in {
+      List.setHead(List(1,2))(3) must_== List(3,2)
+      List.setHead(List(1))(2) must_== List(2)
+      List.setHead(Nil)(1) must_== List(1)
+    }
+  }
 }
