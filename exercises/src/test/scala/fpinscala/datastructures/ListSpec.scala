@@ -52,4 +52,20 @@ class ListSpec extends Specification {
       List.setHead(Nil)(1) must_== List(1)
     }
   }
+
+  "dropWhile" should {
+    "should drop nothing when function always evaluates to false" in {
+      List.dropWhile(List(1))(_ => false) must_== List(1)
+    }
+    "should drop everyting when function always evaluates to true" in {
+      List.dropWhile(List(1))(_ => true) must_== Nil
+    }
+
+    "should only drop values when the function evaluates to true" in {
+      List.dropWhile(List(1,2,3))(_ > 1) must_== List(1, 2, 3)
+      List.dropWhile(List(1,2,3))(_ > 0) must_== Nil
+      List.dropWhile(List(1,2,3))(_ == 1) must_== List(2,3)
+      List.dropWhile(List(1,2,3))(_ == 2) must_== List(1,2,3)
+    }
+  }
 }
