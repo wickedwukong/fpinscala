@@ -54,10 +54,10 @@ class ListSpec extends Specification {
   }
 
   "dropWhile" should {
-    "should drop nothing when function always evaluates to false" in {
+    "drop nothing when function always evaluates to false" in {
       List.dropWhile(List(1))(_ => false) must_== List(1)
     }
-    "should drop everyting when function always evaluates to true" in {
+    "drop everyting when function always evaluates to true" in {
       List.dropWhile(List(1))(_ => true) must_== Nil
     }
 
@@ -66,6 +66,21 @@ class ListSpec extends Specification {
       List.dropWhile(List(1,2,3))(_ > 0) must_== Nil
       List.dropWhile(List(1,2,3))(_ == 1) must_== List(2,3)
       List.dropWhile(List(1,2,3))(_ == 2) must_== List(1,2,3)
+    }
+  }
+
+  "init" should {
+    "return an empty list when the list is empty" in {
+      List.init(Nil) must_== Nil
+    }
+
+    "return an empty list when there is only one element in the list" in {
+      List.init(List(1)) must_== Nil
+    }
+
+    "drop the last element" in {
+      List.init(List(1,2)) must_== List(1)
+      List.init(List(1,2,3)) must_== List(1,2)
     }
   }
 }
