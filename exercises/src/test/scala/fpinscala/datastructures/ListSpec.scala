@@ -25,7 +25,7 @@ class ListSpec extends Specification {
 
 
 
-    
+
     "return an empty list when the list is Nil" in {
       List.drop(Nil, 0) must_== Nil
       List.drop(Nil, 1) must_== Nil
