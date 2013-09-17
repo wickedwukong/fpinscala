@@ -23,9 +23,6 @@ class ListSpec extends Specification {
       List.drop(List(1,2), 3) must_== Nil
     }
 
-
-
-
     "return an empty list when the list is Nil" in {
       List.drop(Nil, 0) must_== Nil
       List.drop(Nil, 1) must_== Nil
@@ -130,6 +127,20 @@ class ListSpec extends Specification {
 
     "be 2 for two-element List" in {
       List.length(List(1,2)) must_== 2
+    }
+  }
+
+  "sum using foldLeft" should {
+    "be zero for Nil" in {
+      List.sumUsingFoldLeft(Nil) must_== 0
+    }
+
+    "work for single-element list" in {
+      List.sumUsingFoldLeft(List(99)) must_== 99
+    }
+
+    "work for multiple-element list" in {
+      List.sumUsingFoldLeft(List(1, 99)) must_== 100
     }
   }
 }

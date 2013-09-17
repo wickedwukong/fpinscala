@@ -100,6 +100,10 @@ object List {
     List.foldRight(l, 0)((elem, acc) => acc + 1)
   }
 
+  def sumUsingFoldLeft(l : List[Int]): Int = {
+    foldLeft(l, 0)(_ + _)
+  }
+
   @tailrec
   def foldLeft[A, B](l: List[A], z: B)(f: (B, A) => B): B = {
     l match {
