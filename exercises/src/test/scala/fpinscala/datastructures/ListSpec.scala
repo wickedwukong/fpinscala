@@ -83,4 +83,29 @@ class ListSpec extends Specification {
       List.init(List(1,2,3)) must_== List(1,2)
     }
   }
+
+  "foldRight" should {
+    "test to pass in a Nil and Cons" in {
+      List.foldRight(List(1, 2, 3), Nil: List[Int])(Cons(_,_)) must_== List(1,2,3)
+    }
+
+//    "stack overflow for a large list" in {
+//      val largeList: List[Long] = (1L to 100000000L).foldLeft(Nil: List[Long])((acc, i) => Cons(i, acc))
+//      List.foldRight(largeList, 0L)(_ + _) must_== 1L
+//    }
+  }
+
+  "length" should {
+    "be 0 for Nil" in {
+      List.length(Nil) must_== 0
+    }
+
+    "be 1 for one-element List" in {
+      List.length(List(1)) must_== 1
+    }
+
+    "be 2 for two-element List" in {
+      List.length(List(1,2)) must_== 2
+    }
+  }
 }

@@ -94,7 +94,9 @@ object List {
     }
   }
 
-  def length[A](l: List[A]): Int = sys.error("todo")
+  def length[A](l: List[A]): Int = {
+    List.foldRight(l, 0)((elem, acc) => acc + 1)
+  }
 
   def foldLeft[A, B](l: List[A], z: B)(f: (B, A) => B): B = sys.error("todo")
 
