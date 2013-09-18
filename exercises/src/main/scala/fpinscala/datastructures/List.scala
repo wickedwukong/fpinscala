@@ -112,5 +112,10 @@ object List {
     }
   }
 
-  def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
+  def map[A, B](l: List[A])(f: A => B): List[B] = {
+    l match {
+      case Nil => Nil
+      case Cons(xs, ys) => Cons(f(xs), map(ys)(f))
+    }
+  }
 }

@@ -143,4 +143,14 @@ class ListSpec extends Specification {
       List.sumUsingFoldLeft(List(1, 99)) must_== 100
     }
   }
+
+  "map" should {
+    "transform Nil to Nil" in {
+      List.map(Nil: List[Int])((x: Int) => x) must_== Nil
+    }
+
+    "transform non-empty list" in {
+      List.map(List(1 ,2))((x: Int) => "value: " + x) must_== List("value: 1", "value: 2")
+    }
+  }
 }
