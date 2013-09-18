@@ -153,4 +153,15 @@ class ListSpec extends Specification {
       List.map(List(1 ,2))((x: Int) => "value: " + x) must_== List("value: 1", "value: 2")
     }
   }
+
+  "reverse" should {
+    "work for nil" in {
+      List.reverse(Nil) must_== Nil
+    }
+
+    "reverse Non-empty list" in {
+      List.reverse(List(1)) must_== List(1)
+      List.reverse(List(1, 2)) must_== List(2, 1)
+    }
+  }
 }

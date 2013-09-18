@@ -104,6 +104,10 @@ object List {
     foldLeft(l, 0)(_ + _)
   }
 
+  def reverse[A](l: List[A]): List[A] = {
+    List.foldLeft(l, Nil: List[A])((a, b) => Cons(b, a))
+  }
+
   @tailrec
   def foldLeft[A, B](l: List[A], z: B)(f: (B, A) => B): B = {
     l match {
@@ -113,9 +117,6 @@ object List {
   }
 
   def map[A, B](l: List[A])(f: A => B): List[B] = {
-    l match {
-      case Nil => Nil
-      case Cons(xs, ys) => Cons(f(xs), map(ys)(f))
-    }
+    List.reverse(List.foldLeft(l, Nil: List[B])((seed, elem) => Cons(f(elem), seed)))
   }
 }
