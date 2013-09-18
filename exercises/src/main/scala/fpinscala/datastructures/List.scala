@@ -108,6 +108,8 @@ object List {
     List.foldLeft(l, Nil: List[A])((a, b) => Cons(b, a))
   }
 
+  def foldLeftViaFoldRight[A, B](l: List[A], z: B)(f: (B, A) => B): B = ???
+
   @tailrec
   def foldLeft[A, B](l: List[A], z: B)(f: (B, A) => B): B = {
     l match {

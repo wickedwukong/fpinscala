@@ -116,6 +116,24 @@ class ListSpec extends Specification {
     }
   }
 
+  "foldLeftViaFoldRight" should {
+    "be 0 for an empty list" in {
+      List.foldLeftViaFoldRight(Nil: List[Int], 0)((elem, sum) => elem + sum ) must_== 0
+    }
+
+    "be 1 for an one-element list" in {
+      List.foldLeftViaFoldRight(List(1), 0)((sum, elem) => elem + sum ) must_== 1
+    }
+
+    "be 3 for an two-element list" in {
+      List.foldLeftViaFoldRight(List(1, 2), 0)((sum, elem) => elem + sum ) must_== 3
+    }
+
+    "test to pass in a Nil and Cons" in {
+      List.foldLeftViaFoldRight(List(1, 2, 3), Nil: List[Int])((nil, elem) => Cons(elem, nil)) must_== List(1, 2, 3)
+    }
+  }
+
   "length" should {
     "be 0 for Nil" in {
       List.length(Nil) must_== 0
