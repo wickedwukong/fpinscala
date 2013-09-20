@@ -47,12 +47,6 @@ object List {
       case Cons(h, t) => Cons(h, append(t, a2))
     }
 
-  def foldRight[A, B](l: List[A], z: B)(f: (A, B) => B): B = // Utility functions
-    l match {
-      case Nil => z
-      case Cons(x, xs) => f(x, foldRight(xs, z)(f))
-    }
-
   def sum2(l: List[Int]) =
     foldRight(l, 0.0)(_ + _)
 
@@ -62,10 +56,10 @@ object List {
 
   def tail[A](l: List[A]): List[A] = {
     List.drop(l, 1)
-//    l match {
-//      case Nil => Nil
-//      case Cons(_, xs) => xs
-//    }
+    //    l match {
+    //      case Nil => Nil
+    //      case Cons(_, xs) => xs
+    //    }
 
   }
 
@@ -100,7 +94,7 @@ object List {
     List.foldRight(l, 0)((elem, acc) => acc + 1)
   }
 
-  def sumUsingFoldLeft(l : List[Int]): Int = {
+  def sumUsingFoldLeft(l: List[Int]): Int = {
     foldLeft(l, 0)(_ + _)
   }
 
@@ -108,7 +102,15 @@ object List {
     List.foldLeft(l, Nil: List[A])((a, b) => Cons(b, a))
   }
 
-  def foldLeftViaFoldRight[A, B](l: List[A], z: B)(f: (B, A) => B): B = ???
+  def foldLeftViaFoldRight[A, B](l: List[A], z: B)(f: (B, A) => B): B = {
+    List.foldRight(l, z)((a, b) => f(b, a))
+  }
+
+  def foldRight[A, B](l: List[A], z: B)(f: (A, B) => B): B = // Utility functions
+    l match {
+      case Nil => z
+      case Cons(x, xs) => f(x, foldRight(xs, z)(f))
+    }
 
   @tailrec
   def foldLeft[A, B](l: List[A], z: B)(f: (B, A) => B): B = {
