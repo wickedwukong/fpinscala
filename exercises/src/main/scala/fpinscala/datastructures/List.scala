@@ -106,6 +106,11 @@ object List {
     List.foldRight(l, z)((a, b) => f(b, a))
   }
 
+  def foldLeftViaFoldRight2[A,B](l: List[A], z: B)(f: (B,A) => B): B = {
+    List.foldRight(l, (b: B) => b)((a, b) => c => b(f(c, a)))(z)
+  }
+
+
   def foldRight[A, B](l: List[A], z: B)(f: (A, B) => B): B = // Utility functions
     l match {
       case Nil => z
