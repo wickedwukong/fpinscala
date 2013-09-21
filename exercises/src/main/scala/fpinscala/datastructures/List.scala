@@ -11,6 +11,12 @@ case object Nil extends List[Nothing]
 case class Cons[+A](head: A, tail: List[A]) extends List[A]
 
 object List {
+  def concat[A](l1: List[A], l2: List[A]): List[A] = ???
+
+  def appendViaFoldRight[A](l: List[A], i: A): List[A] = {
+    foldRight(l, List(i))((c, acc) => Cons(c, acc))
+  }
+
   // `List` companion object
   def sum(ints: List[Int]): Int = ints match {
     // Pattern matching example
