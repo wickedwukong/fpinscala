@@ -8,19 +8,19 @@ import org.specs2.matcher._
 class ListSpec extends Specification {
   "drop" should {
     "not drop any element when the 0 elemement is to be dropped" in {
-      List.drop(List(1,2), 0) must_== List(1, 2)
+      List.drop(List(1, 2), 0) must_== List(1, 2)
     }
     "drop the first element in a multiple element list" in {
-      List.drop(List(1,2), 1) must_== List(2)
+      List.drop(List(1, 2), 1) must_== List(2)
     }
     "drop the first two elements in a multiple element list" in {
-      List.drop(List(1,2, 3), 2) must_== List(3)
+      List.drop(List(1, 2, 3), 2) must_== List(3)
     }
     "return an empty list when the list size is same as the number of elements to be dropped" in {
-      List.drop(List(1,2), 2) must_== Nil
+      List.drop(List(1, 2), 2) must_== Nil
     }
     "return an empty list when the list size is less than the number of elements to be dropped" in {
-      List.drop(List(1,2), 3) must_== Nil
+      List.drop(List(1, 2), 3) must_== Nil
     }
 
     "return an empty list when the list is Nil" in {
@@ -32,7 +32,7 @@ class ListSpec extends Specification {
 
   "tail" should {
     "drop the first element" in {
-      List.tail(List(1,2)) must_== List(2)
+      List.tail(List(1, 2)) must_== List(2)
     }
     "return an empty list when there is only one element" in {
       List.tail(List(1)) must_== Nil
@@ -44,7 +44,7 @@ class ListSpec extends Specification {
 
   "setHead" should {
     "replace first element with new value" in {
-      List.setHead(List(1,2))(3) must_== List(3,2)
+      List.setHead(List(1, 2))(3) must_== List(3, 2)
       List.setHead(List(1))(2) must_== List(2)
       List.setHead(Nil)(1) must_== List(1)
     }
@@ -59,10 +59,10 @@ class ListSpec extends Specification {
     }
 
     "should only drop values when the function evaluates to true" in {
-      List.dropWhile(List(1,2,3))(_ > 1) must_== List(1, 2, 3)
-      List.dropWhile(List(1,2,3))(_ > 0) must_== Nil
-      List.dropWhile(List(1,2,3))(_ == 1) must_== List(2,3)
-      List.dropWhile(List(1,2,3))(_ == 2) must_== List(1,2,3)
+      List.dropWhile(List(1, 2, 3))(_ > 1) must_== List(1, 2, 3)
+      List.dropWhile(List(1, 2, 3))(_ > 0) must_== Nil
+      List.dropWhile(List(1, 2, 3))(_ == 1) must_== List(2, 3)
+      List.dropWhile(List(1, 2, 3))(_ == 2) must_== List(1, 2, 3)
     }
   }
 
@@ -76,34 +76,34 @@ class ListSpec extends Specification {
     }
 
     "drop the last element" in {
-      List.init(List(1,2)) must_== List(1)
-      List.init(List(1,2,3)) must_== List(1,2)
+      List.init(List(1, 2)) must_== List(1)
+      List.init(List(1, 2, 3)) must_== List(1, 2)
     }
   }
 
   "foldRight" should {
     "test to pass in a Nil and Cons" in {
-      List.foldRight(List(1, 2, 3), Nil: List[Int])(Cons(_,_)) must_== List(1,2,3)
+      List.foldRight(List(1, 2, 3), Nil: List[Int])(Cons(_, _)) must_== List(1, 2, 3)
     }
 
-//    "stack overflow for a large list" in {
-//      val largeList: List[Long] = (1L to 100000L).foldLeft(Nil: List[Long])((acc, i) => Cons(i, acc))
-//      List.foldRight(largeList, 0L)(_ + _) must_== 1L
-//      1 must_== 1
-//    }
+    //    "stack overflow for a large list" in {
+    //      val largeList: List[Long] = (1L to 100000L).foldLeft(Nil: List[Long])((acc, i) => Cons(i, acc))
+    //      List.foldRight(largeList, 0L)(_ + _) must_== 1L
+    //      1 must_== 1
+    //    }
   }
 
   "foldLeft" should {
     "be 0 for an empty list" in {
-      List.foldLeft(Nil: List[Int], 0)((elem, sum) => elem + sum ) must_== 0
+      List.foldLeft(Nil: List[Int], 0)((elem, sum) => elem + sum) must_== 0
     }
 
     "be 1 for an one-element list" in {
-      List.foldLeft(List(1), 0)((sum, elem) => elem + sum ) must_== 1
+      List.foldLeft(List(1), 0)((sum, elem) => elem + sum) must_== 1
     }
 
     "be 3 for an two-element list" in {
-      List.foldLeft(List(1, 2), 0)((sum, elem) => elem + sum ) must_== 3
+      List.foldLeft(List(1, 2), 0)((sum, elem) => elem + sum) must_== 3
     }
 
     "test to pass in a Nil and Cons" in {
@@ -118,15 +118,15 @@ class ListSpec extends Specification {
 
   "foldLeftViaFoldRight" should {
     "be 0 for an empty list" in {
-      List.foldLeftViaFoldRight(Nil: List[Int], 0)((elem, sum) => elem + sum ) must_== 0
+      List.foldLeftViaFoldRight(Nil: List[Int], 0)((elem, sum) => elem + sum) must_== 0
     }
 
     "be 1 for an one-element list" in {
-      List.foldLeftViaFoldRight(List(1), 0)((sum, elem) => elem + sum ) must_== 1
+      List.foldLeftViaFoldRight(List(1), 0)((sum, elem) => elem + sum) must_== 1
     }
 
     "be 3 for an two-element list" in {
-      List.foldLeftViaFoldRight(List(1, 2), 0)((sum, elem) => elem + sum ) must_== 3
+      List.foldLeftViaFoldRight(List(1, 2), 0)((sum, elem) => elem + sum) must_== 3
     }
 
     "test to pass in a Nil and Cons" in {
@@ -144,7 +144,7 @@ class ListSpec extends Specification {
     }
 
     "be 2 for two-element List" in {
-      List.length(List(1,2)) must_== 2
+      List.length(List(1, 2)) must_== 2
     }
   }
 
@@ -168,7 +168,7 @@ class ListSpec extends Specification {
     }
 
     "transform non-empty list" in {
-      List.map(List(1 ,2))((x: Int) => "value: " + x) must_== List("value: 1", "value: 2")
+      List.map(List(1, 2))((x: Int) => "value: " + x) must_== List("value: 1", "value: 2")
     }
   }
 
@@ -189,7 +189,7 @@ class ListSpec extends Specification {
     }
     "append item to a non-empty list" in {
       List.appendViaFoldRight(List(1), 2) must_== List(1, 2)
-      List.appendViaFoldRight(List(1,2 ), 3) must_== List(1, 2,3)
+      List.appendViaFoldRight(List(1, 2), 3) must_== List(1, 2, 3)
     }
   }
 
@@ -200,12 +200,49 @@ class ListSpec extends Specification {
 
     "concatenate one non-empty list" in {
       List.concat(List(List(1))) must_== List(1)
-      List.concat(List(List(1,2))) must_== List(1, 2)
+      List.concat(List(List(1, 2))) must_== List(1, 2)
     }
 
     "concatenate two non-empty list" in {
       List.concat(List(List(1), List(2))) must_== List(1, 2)
-      List.concat(List(List(1), List(2,3))) must_== List(1, 2,3)
+      List.concat(List(List(1), List(2, 3))) must_== List(1, 2, 3)
+    }
+  }
+
+  "hasSubsequence" should {
+
+    "be true when a list is a subsequence" in {
+      List.hasSubsequence(List(1), List(1)) must_== true
+      List.hasSubsequence(List(1, 2), List(2)) must_== true
+      List.hasSubsequence(List(1, 2), List(1, 2)) must_== true
+      List.hasSubsequence(List(1, 2, 3), List(2, 3)) must_== true
+      List.hasSubsequence(List(1, 2, 3), List(1, 2, 3)) must_== true
+      List.hasSubsequence(List(1, 2, 3), List(1, 2)) must_== true
+      List.hasSubsequence(List(1, 2, 3), List(2, 3)) must_== true
+      List.hasSubsequence(List(1, 2, 3), List(2)) must_== true
+      List.hasSubsequence(List(1, 2, 3), List(3)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(1)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(2)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(3)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(4)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(1, 2)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(1, 2, 3)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(1, 2, 3, 4)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(2, 3, 4)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(2, 3)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(3)) must_== true
+    }
+
+    "be true for a Nil as subsequence" in {
+      List.hasSubsequence(Nil, Nil) must_== true
+      List.hasSubsequence(List(1), Nil) must_== true
+    }
+
+    "be false when a list is not a subsequence" in {
+      List.hasSubsequence(List(1), List(2)) must_== false
+      List.hasSubsequence(List(1, 2), List(2, 3)) must_== false
+      List.hasSubsequence(List(1, 2), List(3)) must_== false
+      List.hasSubsequence(List(1, 2, 3), List(2, 4)) must_== false
     }
   }
 }
