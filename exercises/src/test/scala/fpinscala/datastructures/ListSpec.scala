@@ -194,24 +194,18 @@ class ListSpec extends Specification {
   }
 
   "concat" should {
-    "concatenate two Nils" in {
-      List.concat(Nil, Nil) must_== Nil
+    "work two Nil" in {
+      List.concat(Nil) must_== Nil
     }
 
-    "concatenate a non-empty list with a Nil" in {
-      List.concat(List(1), Nil) must_== List(1)
-      List.concat(List(1,2), Nil) must_== List(1, 2)
+    "concatenate one non-empty list" in {
+      List.concat(List(List(1))) must_== List(1)
+      List.concat(List(List(1,2))) must_== List(1, 2)
     }
 
-    "concatenate a Nil with a non-empty list" in {
-      List.concat(Nil, List(1)) must_== List(1)
-      List.concat(Nil, List(1,2)) must_== List(1, 2)
-    }
-
-    "concatenate two non-empty lists" in {
-      List.concat(List(1), List(2)) must_== List(1, 2)
-      List.concat(List(1), List(2, 3)) must_== List(1, 2, 3)
-      List.concat(List(1, 2), List(3, 4)) must_== List(1, 2, 3, 4)
+    "concatenate two non-empty list" in {
+      List.concat(List(List(1), List(2))) must_== List(1, 2)
+      List.concat(List(List(1), List(2,3))) must_== List(1, 2,3)
     }
   }
 }
