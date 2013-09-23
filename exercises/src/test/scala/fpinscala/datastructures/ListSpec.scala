@@ -81,6 +81,24 @@ class ListSpec extends Specification {
     }
   }
 
+  "take" should {
+    "return an empty list when the list is empty" in {
+      List.take(Nil, 1) must_== Nil
+    }
+
+    "return an empty list when take 0 elements in the list" in {
+      List.take(Nil, 0) must_== Nil
+      List.take(List(1), 0) must_== Nil
+    }
+
+    "return the first n elements in the list" in {
+      List.take(List(1), 1) must_== List(1)
+      List.take(List(1, 2), 1) must_== List(1)
+      List.take(List(1, 2), 2) must_== List(1, 2)
+      List.take(List(1, 2, 3), 2) must_== List(1, 2)
+    }
+  }
+
   "foldRight" should {
     "test to pass in a Nil and Cons" in {
       List.foldRight(List(1, 2, 3), Nil: List[Int])(Cons(_, _)) must_== List(1, 2, 3)

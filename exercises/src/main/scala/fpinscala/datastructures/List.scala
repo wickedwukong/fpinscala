@@ -12,6 +12,16 @@ case class Cons[+A](head: A, tail: List[A]) extends List[A]
 
 object List {
 
+  def take[A](l: List[A], n: Int): List[A] = {
+    if (n > 0) {
+      l match {
+        case Nil => Nil
+        case Cons(xs,ys) => Cons(xs, take(ys, n - 1))
+      }
+    } else
+      Nil
+  }
+
   def hasSubsequence[A](l: List[A], sub: List[A]): Boolean = ???
 
   def concat[A](l: List[List[A]]): List[A] = {
