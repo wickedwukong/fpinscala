@@ -97,6 +97,14 @@ class ListSpec extends Specification {
       List.take(List(1, 2), 2) must_== List(1, 2)
       List.take(List(1, 2, 3), 2) must_== List(1, 2)
     }
+
+    "take should be immutalbe" in {
+      val l = List(1,2,3)
+
+      List.take(l, 2)
+
+      l must_== List(1, 2, 3)
+    }
   }
 
   "foldRight" should {
