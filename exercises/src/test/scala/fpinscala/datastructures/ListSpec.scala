@@ -98,12 +98,23 @@ class ListSpec extends Specification {
       List.take(List(1, 2, 3), 2) must_== List(1, 2)
     }
 
+    "return the whole list when take more than the number of items in the list" in {
+      List.take(List(1), 2) must_== List(1)
+      List.take(List(1, 2), 3) must_== List(1, 2)
+    }
+
     "take should be immutalbe" in {
       val l = List(1,2,3)
 
       List.take(l, 2)
 
       l must_== List(1, 2, 3)
+
+      val l2 = List(1,2,3)
+
+      List.take(l, 4)
+
+      l2 must_== List(1, 2, 3)
     }
   }
 
