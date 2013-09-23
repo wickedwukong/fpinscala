@@ -22,7 +22,24 @@ object List {
       Nil
   }
 
-  def hasSubsequence[A](l: List[A], sub: List[A]): Boolean = ???
+  def hasSubsequence[A](l: List[A], sub: List[A]): Boolean = {
+    val currentSubList = take(l, length(sub))
+    val theRestOfList = drop(l, length(sub))
+
+    @tailrec
+    def isCurrenSubSequenceTheSubsequence(currentSubList: List[A], theRestOfList: List[A], sub: List[A]): Boolean = {
+      if (currentSubList == sub)
+        true
+      else if (theRestOfList == Nil) {
+        false
+      }
+      else {
+        isCurrenSubSequenceTheSubsequence(append(tail(currentSubList), take(theRestOfList, 1)), drop(theRestOfList, 1), sub)
+      }
+    }
+
+    isCurrenSubSequenceTheSubsequence(currentSubList, theRestOfList, sub)
+  }
 
   def concat[A](l: List[List[A]]): List[A] = {
     foldLeft(l, List[A]())((acc, ll) => {
