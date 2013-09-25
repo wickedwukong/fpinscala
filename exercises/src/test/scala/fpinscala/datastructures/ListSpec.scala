@@ -2,8 +2,6 @@ package fpinscala.datastructures
 
 import org.specs2.mutable.Specification
 import scala.Predef._
-import org.specs2.matcher._
-
 
 class ListSpec extends Specification {
   "drop" should {
