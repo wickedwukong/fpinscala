@@ -247,25 +247,25 @@ class ListSpec extends Specification {
   "hasSubsequence" should {
 
     "be true when a list is a subsequence" in {
-//      List.hasSubsequence(List(1), List(1)) must_== true
+      List.hasSubsequence(List(1), List(1)) must_== true
       List.hasSubsequence(List(1, 2), List(2)) must_== true
       List.hasSubsequence(List(1, 2), List(1, 2)) must_== true
       List.hasSubsequence(List(1, 2, 3), List(2, 3)) must_== true
-//      List.hasSubsequence(List(1, 2, 3), List(1, 2, 3)) must_== true
-//      List.hasSubsequence(List(1, 2, 3), List(1, 2)) must_== true
-//      List.hasSubsequence(List(1, 2, 3), List(2, 3)) must_== true
-//      List.hasSubsequence(List(1, 2, 3), List(2)) must_== true
-//      List.hasSubsequence(List(1, 2, 3), List(3)) must_== true
-//      List.hasSubsequence(List(1, 2, 3, 4), List(1)) must_== true
-//      List.hasSubsequence(List(1, 2, 3, 4), List(2)) must_== true
-//      List.hasSubsequence(List(1, 2, 3, 4), List(3)) must_== true
-//      List.hasSubsequence(List(1, 2, 3, 4), List(4)) must_== true
-//      List.hasSubsequence(List(1, 2, 3, 4), List(1, 2)) must_== true
-//      List.hasSubsequence(List(1, 2, 3, 4), List(1, 2, 3)) must_== true
-//      List.hasSubsequence(List(1, 2, 3, 4), List(1, 2, 3, 4)) must_== true
-//      List.hasSubsequence(List(1, 2, 3, 4), List(2, 3, 4)) must_== true
-//      List.hasSubsequence(List(1, 2, 3, 4), List(2, 3)) must_== true
-//      List.hasSubsequence(List(1, 2, 3, 4), List(3)) must_== true
+      List.hasSubsequence(List(1, 2, 3), List(1, 2, 3)) must_== true
+      List.hasSubsequence(List(1, 2, 3), List(1, 2)) must_== true
+      List.hasSubsequence(List(1, 2, 3), List(2, 3)) must_== true
+      List.hasSubsequence(List(1, 2, 3), List(2)) must_== true
+      List.hasSubsequence(List(1, 2, 3), List(3)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(1)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(2)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(3)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(4)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(1, 2)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(1, 2, 3)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(1, 2, 3, 4)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(2, 3, 4)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(2, 3)) must_== true
+      List.hasSubsequence(List(1, 2, 3, 4), List(3)) must_== true
     }
 
     "be true for a Nil as subsequence" in {

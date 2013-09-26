@@ -1,8 +1,6 @@
 package fpinscala.datastructures
 
 import org.specs2.mutable.Specification
-import Tree._
-import scala.Predef._
 
 class TreeSpec extends Specification {
   "size" should {
