@@ -9,6 +9,9 @@ case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
 
 object Tree {
 
+//  def fold[A,B](t: Tree[A])(f: A => B)(g: (B,B) => B): B
+
+
   def size[A](tree: Tree[A]): Int = {
     tree match {
       case Leaf(_) => 1
