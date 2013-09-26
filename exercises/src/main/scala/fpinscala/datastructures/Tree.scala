@@ -15,6 +15,19 @@ object Tree {
     }
   }
 
+  def depth[A](tree: Tree[A]): Int = {
+
+    def go(tree: Tree[A], currentDepth: Int): Int = {
+      tree match {
+        case Leaf(_) => 1 + currentDepth
+        case Branch(leftTree, rightTree) => (go(leftTree, currentDepth + 1)) max (go(rightTree, currentDepth + 1))
+      }
+    }
+
+    go(tree, 0)
+
+  }
+
   def max(tree: Tree[Int]): Int = {
     tree match {
       case Leaf(a) => a

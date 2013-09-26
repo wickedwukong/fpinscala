@@ -34,4 +34,23 @@ class TreeSpec extends Specification {
       Tree.max(Branch(Branch(Leaf(200), Leaf(300)), Branch(Leaf(200), Leaf(400)))) must_== 400
     }
   }
+
+  "depth" should {
+    "be 1 for a single leaf tree" in {
+      Tree.depth(Leaf(100)) must_== 1
+    }
+
+    "be 1 for a symmetric one leaf tree" in {
+      Tree.depth(Branch(Leaf(100), Leaf(200))) must_== 2
+    }
+
+    "be the maximum length of a nested tree" in {
+      Tree.depth(Branch(Leaf(100), Branch(Leaf(1), Leaf(2)))) must_== 3
+      Tree.depth(Branch(Branch(Leaf(1), Leaf(2)), Leaf(100))) must_== 3
+      Tree.depth(Branch(Branch(Leaf(1), Leaf(2)), Branch(Leaf(1), Leaf(2)))) must_== 3
+      Tree.depth(Branch(Branch(Leaf(1), Leaf(2)), Branch(Leaf(1), Branch(Leaf(1), Leaf(2))))) must_== 4
+      Tree.depth(Branch(Branch(Leaf(1), Leaf(2)), Branch(Branch(Leaf(1), Leaf(2)), Leaf(1)))) must_== 4
+      Tree.depth(Branch(Branch(Branch(Leaf(1), Leaf(2)), Leaf(1)), Branch(Leaf(1), Leaf(2)))) must_== 4
+    }
+  }
 }
