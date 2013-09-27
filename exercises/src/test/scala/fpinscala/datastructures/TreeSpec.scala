@@ -53,4 +53,15 @@ class TreeSpec extends Specification {
       Tree.depth(Branch(Branch(Branch(Leaf(1), Leaf(2)), Leaf(1)), Branch(Leaf(1), Leaf(2)))) must_== 3
     }
   }
+
+  "map" should {
+    "work for a leaf" in {
+      Tree.map(Leaf(1))(v => v + 1) must_== Leaf(2)
+    }
+
+    "work for a branch" in {
+      Tree.map(Branch(Leaf(1), Leaf(2)))(v => v + 1) must_== Branch(Leaf(2), Leaf(3))
+      Tree.map(Branch(Branch(Leaf(1), Leaf(2)), Branch(Leaf(3), Leaf(4))))(v => v + 1) must_== Branch(Branch(Leaf(2), Leaf(3)), Branch(Leaf(4), Leaf(5)))
+    }
+  }
 }

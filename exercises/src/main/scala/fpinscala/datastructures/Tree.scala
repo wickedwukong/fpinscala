@@ -1,7 +1,5 @@
 package fpinscala.datastructures
 
-import scala.runtime.RichInt
-
 sealed trait Tree[+A]
 case class Leaf[A](value: A) extends Tree[A]
 case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
@@ -16,6 +14,13 @@ object Tree {
     tree match {
       case Leaf(_) => 1
       case Branch(leftTree, rightTree) => 1 + size(leftTree) + size(rightTree)
+    }
+  }
+
+  def map[A, B](tree: Tree[A])(f: A => B): Tree[B] = {
+    tree match {
+      case Leaf(a) => Leaf(f(a))
+      case Branch(leftTree, rightTree) => Branch(map(leftTree)(f), map(rightTree)(f))
     }
   }
 
