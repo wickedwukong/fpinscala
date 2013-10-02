@@ -17,6 +17,20 @@ class TreeSpec extends Specification {
     }
   }
 
+  "sizeViaFold" should {
+    "give 1 for a Leaf" in {
+      Tree.sizeViaFold(Leaf(1)) must_== 1
+    }
+
+    "give 2 for a two Leaf tree" in {
+      Tree.sizeViaFold(Branch(Leaf(1), Leaf(2))) must_== 3
+    }
+
+    "count the size of a nested tree" in {
+      Tree.sizeViaFold(Branch(Leaf(1), Branch(Leaf(2), Branch(Leaf(3), Leaf(4))))) must_== 7
+    }
+  }
+
   "max" should {
     "give the value of the single leaf tree" in {
       Tree.max(Leaf(100)) must_== 100
@@ -51,6 +65,25 @@ class TreeSpec extends Specification {
       Tree.depth(Branch(Branch(Leaf(1), Leaf(2)), Branch(Leaf(1), Branch(Leaf(1), Leaf(2))))) must_== 3
       Tree.depth(Branch(Branch(Leaf(1), Leaf(2)), Branch(Branch(Leaf(1), Leaf(2)), Leaf(1)))) must_== 3
       Tree.depth(Branch(Branch(Branch(Leaf(1), Leaf(2)), Leaf(1)), Branch(Leaf(1), Leaf(2)))) must_== 3
+    }
+  }
+
+  "depthViaFold" should {
+    "be 1 for a single leaf tree" in {
+      Tree.depthViaFold(Leaf(100)) must_== 0
+    }
+
+    "be 1 for a symmetric one leaf tree" in {
+      Tree.depthViaFold(Branch(Leaf(100), Leaf(200))) must_== 1
+    }
+
+    "be the maximum length of a nested tree" in {
+      Tree.depthViaFold(Branch(Leaf(100), Branch(Leaf(1), Leaf(2)))) must_== 2
+      Tree.depthViaFold(Branch(Branch(Leaf(1), Leaf(2)), Leaf(100))) must_== 2
+      Tree.depthViaFold(Branch(Branch(Leaf(1), Leaf(2)), Branch(Leaf(1), Leaf(2)))) must_== 2
+      Tree.depthViaFold(Branch(Branch(Leaf(1), Leaf(2)), Branch(Leaf(1), Branch(Leaf(1), Leaf(2))))) must_== 3
+      Tree.depthViaFold(Branch(Branch(Leaf(1), Leaf(2)), Branch(Branch(Leaf(1), Leaf(2)), Leaf(1)))) must_== 3
+      Tree.depthViaFold(Branch(Branch(Branch(Leaf(1), Leaf(2)), Leaf(1)), Branch(Leaf(1), Leaf(2)))) must_== 3
     }
   }
 

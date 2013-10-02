@@ -7,8 +7,16 @@ case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
 
 object Tree {
 
-//  def fold[A,B](t: Tree[A])(f: A => B)(g: (B,B) => B): B
+  def fold[A,B](t: Tree[A])(f: A => B)(g: (B,B) => B): B = {
+    t match {
+      case Leaf(a) => f(a)
+      case Branch(leftTree, rightTree) => g(fold(leftTree)(f)(g),  fold(rightTree)(f)(g))
+    }
+  }
 
+  def sizeViaFold[A](tree: Tree[A]): Int = {
+    fold(tree)(a => 1)((b, c) => 1 + b + c)
+  }
 
   def size[A](tree: Tree[A]): Int = {
     tree match {
@@ -24,12 +32,15 @@ object Tree {
     }
   }
 
+  def depthViaFold[A](tree: Tree[A]): Int = {
+    fold(tree)(a => 0)((b, c) => 1 + (b max c))
+  }
+
   def depth[A](tree: Tree[A]): Int = {
       tree match {
         case Leaf(_) => 0
         case Branch(leftTree, rightTree) =>1 + (depth(leftTree)  max depth(rightTree))
       }
-
   }
 
   def max(tree: Tree[Int]): Int = {
