@@ -51,4 +51,8 @@ object Tree {
       }
     }
   }
+
+  def maxViaFold(tree: Tree[Int]): Int = {
+    fold(tree)(a => a)((b, c) => b max c)
+  }
 }

@@ -49,6 +49,24 @@ class TreeSpec extends Specification {
     }
   }
 
+  "maxViaFold" should {
+    "give the value of the single leaf tree" in {
+      Tree.maxViaFold(Leaf(100)) must_== 100
+    }
+
+    "give the higher value of a two leaf tree" in {
+      Tree.maxViaFold(Branch(Leaf(100), Leaf(1))) must_== 100
+      Tree.maxViaFold(Branch(Leaf(100), Leaf(100))) must_== 100
+      Tree.maxViaFold(Branch(Leaf(1), Leaf(100))) must_== 100
+    }
+
+    "give the higest value of a nested tree" in {
+      Tree.maxViaFold(Branch(Leaf(100), Branch(Leaf(200), Leaf(300)))) must_== 300
+      Tree.maxViaFold(Branch(Branch(Leaf(200), Leaf(300)), Leaf(100))) must_== 300
+      Tree.maxViaFold(Branch(Branch(Leaf(200), Leaf(300)), Branch(Leaf(200), Leaf(400)))) must_== 400
+    }
+  }
+
   "depth" should {
     "be 1 for a single leaf tree" in {
       Tree.depth(Leaf(100)) must_== 0
