@@ -4,6 +4,7 @@ import org.specs2.mutable.Specification
 import scala.Predef._
 
 class ListSpec extends Specification {
+
   "drop" should {
     "not drop any element when the 0 elemement is to be dropped" in {
       List.drop(List(1, 2), 0) must_== List(1, 2)
