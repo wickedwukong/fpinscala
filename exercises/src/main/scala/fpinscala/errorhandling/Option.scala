@@ -100,7 +100,11 @@ object Option {
 
   def bothMatch_2(pat1: String, pat2: String, s: String): Option[Boolean] = sys.error("todo")
 
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = sys.error("todo")
+  def sequence[A](a: List[Option[A]]): Option[List[A]] = {
+    a match {
+      case head :: tail => head.map(h => List(h) :: sequence(tail))
+    }
+  }
 
   def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = sys.error("todo")
 }
