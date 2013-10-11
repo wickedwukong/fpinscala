@@ -36,12 +36,26 @@ class OptionSpec extends Specification {
     "be None when the list contains a None" in {
       Option.sequence(List[Option[Nothing]](None)) must_== None
       Option.sequence(List(Some(1), None)) must_== None
+      Option.sequence(List(Some(1), None, Some(2))) must_== None
       Option.sequence(List(None, Some(1))) must_== None
     }
 
     "Some list" in {
       Option.sequence(List(Some(1))) must_== Some(List(1))
       Option.sequence(List(Some(1), Some(2))) must_== Some(List(1, 2))
+    }
+  }
+
+  "sequence_1" should {
+    "be None when the list contains a None" in {
+      Option.sequence_1(List[Option[Nothing]](None)) must_== None
+      Option.sequence_1(List(Some(1), None)) must_== None
+      Option.sequence_1(List(None, Some(1))) must_== None
+    }
+
+    "Some list" in {
+      Option.sequence_1(List(Some(1))) must_== Some(List(1))
+      Option.sequence_1(List(Some(1), Some(2))) must_== Some(List(1, 2))
     }
   }
 }

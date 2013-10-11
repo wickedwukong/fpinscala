@@ -113,5 +113,11 @@ object Option {
     }
   }
 
+  def sequence_1[A](a: List[Option[A]]): Option[List[A]] = {
+    a.foldRight[Option[List[A]]](Some(Nil))((optionA, acc) => {
+      optionA.flatMap(valueA => acc.map(accList => valueA :: accList))
+    })
+  }
+
   def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = sys.error("todo")
 }
