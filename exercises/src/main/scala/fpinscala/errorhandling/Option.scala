@@ -120,6 +120,12 @@ object Option {
   }
 
   def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = {
+    a.foldRight[Option[List[B]]](Some(Nil))((item, acc) => {
+      f(item).flatMap(b => acc.map(b :: _))
+    })
+  }
+
+  def traverseViaSequence[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = {
     sequence(a.map(f))
   }
 }
