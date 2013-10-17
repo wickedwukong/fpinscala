@@ -58,4 +58,15 @@ class OptionSpec extends Specification {
       Option.sequence_1(List(Some(1), Some(2))) must_== Some(List(1, 2))
     }
   }
+
+  "traverse" should {
+    "give Some list" in {
+      Option.traverse(List(1, 2))(a => Some(a + 1)) must_== Some(List(2, 3))
+    }
+    "give None if the function maps to a None" in {
+      Option.traverse(List(1, 2))(a => None) must_== None
+      Option.traverse(List(Some(1), None))(a => a) must_== None
+      Option.traverse(List(None, Some(1)))(a => a) must_== None
+    }
+  }
 }
