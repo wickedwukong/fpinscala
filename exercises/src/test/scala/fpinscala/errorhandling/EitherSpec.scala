@@ -23,4 +23,16 @@ class EitherSpec extends Specification {
       Right[Int](1).flatMap(a => Right("abc")) must_== Right("abc")
     }
   }
+
+  "orElse" should {
+    "give left for two left" in {
+      Left("error-1") orElse Left("error-2") must_== Left("error-2")
+    }
+
+    "give right for a left and a right" in {
+      Left("error") orElse Right(1) must_== Right(1)
+      Right(1) orElse Left("error")  must_== Right(1)
+      Right(1) orElse Right(2)  must_== Right(1)
+    }
+  }
 }

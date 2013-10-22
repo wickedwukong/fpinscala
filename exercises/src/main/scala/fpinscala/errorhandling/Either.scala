@@ -15,7 +15,12 @@ sealed trait Either[+E,+A] {
    }
  }
 
- def orElse[EE >: E, B >: A](b: => Either[EE, B]): Either[EE, B] = sys.error("todo")
+ def orElse[EE >: E, B >: A](b: => Either[EE, B]): Either[EE, B] = {
+   this match {
+     case Right(a) => Right(a)
+     case Left(_) => b
+   }
+ }
 
  def map2[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[EE, C] = sys.error("todo")
 }
