@@ -35,4 +35,17 @@ class EitherSpec extends Specification {
       Right(1) orElse Right(2)  must_== Right(1)
     }
   }
+
+  "map2" should {
+    "map 2 right to 1 right" in {
+      Right(1).map2(Right(2))((a, b) => a + b) must_==Right(3)
+    }
+
+    "map 1 right and 1 left to a left" in {
+      Left("error").map2(Right(1))((a, b) => a + b)  must_== Left("error")
+      Left("error").map2(Right(1))((a, b) => a + b)  must_== Left("error")
+      Right(1) orElse Left("error")  must_== Right(1)
+      Right(1) orElse Right(2)  must_== Right(1)
+    }
+  }
 }
