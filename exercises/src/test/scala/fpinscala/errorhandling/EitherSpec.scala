@@ -51,21 +51,21 @@ class EitherSpec extends Specification {
     }
   }
 
-  "sequence" should {
+  "sequenceViaFoldLeft" should {
     "convert a List of Right to a Right List" in {
-      Either.sequence(List(Right(1))) must_== Right(List(1))
-      Either.sequence(List(Right(1), Right(2))) must_== Right(List(1, 2))
+      Either.sequenceViaFoldLeft(List(Right(1))) must_== Right(List(1))
+      Either.sequenceViaFoldLeft(List(Right(1), Right(2))) must_== Right(List(1, 2))
     }
 
     "convert a List of Left to the first Left in the List" in {
-      Either.sequence(List(Left("error"))) must_== Left("error")
-      Either.sequence(List(Left("error1"), Left("error2"))) must_== Left("error1")
+      Either.sequenceViaFoldLeft(List(Left("error"))) must_== Left("error")
+      Either.sequenceViaFoldLeft(List(Left("error1"), Left("error2"))) must_== Left("error1")
     }
 
     "convert a List containing a Left to the first Left in the List" in {
-      Either.sequence(List(Left("error"), Right(1))) must_== Left("error")
-      Either.sequence(List(Right(1), Left("error1"), Left("error2"))) must_== Left("error1")
-      Either.sequence(List(Right(1), Left("error1"), Right(2))) must_== Left("error1")
+      Either.sequenceViaFoldLeft(List(Left("error"), Right(1))) must_== Left("error")
+      Either.sequenceViaFoldLeft(List(Right(1), Left("error1"), Left("error2"))) must_== Left("error1")
+      Either.sequenceViaFoldLeft(List(Right(1), Left("error1"), Right(2))) must_== Left("error1")
     }
   }
 
