@@ -125,6 +125,10 @@ object Option {
     })
   }
 
+  def sequenceViaTraverse[A](a: List[Option[A]]): Option[List[A]] = {
+    traverse(a)(a => a)
+  }
+
   def traverseViaSequence[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = {
     sequence(a.map(f))
   }

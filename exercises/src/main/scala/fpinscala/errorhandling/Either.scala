@@ -26,6 +26,7 @@ sealed trait Either[+E, +A] {
     this.flatMap(a => b.map(bb => f(a, bb)))
   }
 
+
   def map2ViaForComprehension[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[EE, C] = {
     for {a <- this;
          bb <- b
@@ -38,6 +39,10 @@ case class Left[+E](get: E) extends Either[E, Nothing]
 case class Right[+A](get: A) extends Either[Nothing, A]
 
 object Either {
+  def sequence[E, A](es: List[Either[E, A]]): Either[E, List[A]] = ???
+  def traverse[E, A, B](l: List[A])(f: A => Either[E, B]): Either[E, List[B]]= ???
+
+
   def mean(xs: IndexedSeq[Double]): Either[String, Double] =
     if (xs.isEmpty)
       Left("mean of empty list!")

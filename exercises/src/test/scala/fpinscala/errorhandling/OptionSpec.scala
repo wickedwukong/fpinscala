@@ -59,6 +59,20 @@ class OptionSpec extends Specification {
     }
   }
 
+  "sequenceViaTraverse" should {
+    "be None when the list contains a None" in {
+      Option.sequenceViaTraverse(List[Option[Nothing]](None)) must_== None
+      Option.sequenceViaTraverse(List(Some(1), None)) must_== None
+      Option.sequenceViaTraverse(List(None, Some(1))) must_== None
+    }
+
+    "Some list" in {
+      Option.sequenceViaTraverse(List(Some(1))) must_== Some(List(1))
+      Option.sequenceViaTraverse(List(Some(1), Some(2))) must_== Some(List(1, 2))
+    }
+
+  }
+
   "traverse" should {
     "give Some list" in {
       Option.traverse(List(1, 2))(a => Some(a + 1)) must_== Some(List(2, 3))
@@ -67,6 +81,17 @@ class OptionSpec extends Specification {
       Option.traverse(List(1, 2))(a => None) must_== None
       Option.traverse(List(Some(1), None))(a => a) must_== None
       Option.traverse(List(None, Some(1)))(a => a) must_== None
+    }
+  }
+
+  "traverseViaSequence" should {
+    "give Some list" in {
+      Option.traverseViaSequence(List(1, 2))(a => Some(a + 1)) must_== Some(List(2, 3))
+    }
+    "give None if the function maps to a None" in {
+      Option.traverseViaSequence(List(1, 2))(a => None) must_== None
+      Option.traverseViaSequence(List(Some(1), None))(a => a) must_== None
+      Option.traverseViaSequence(List(None, Some(1)))(a => a) must_== None
     }
   }
 }
