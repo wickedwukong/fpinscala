@@ -87,6 +87,22 @@ class EitherSpec extends Specification {
     }
   }
 
+  "traverse" should {
+    "give a left" in {
+      Either.traverse(List(1))(i => Left(i)) must_== Left(1)
+      Either.traverse(List(1, 2))(i => Left(i)) must_== Left(1)
+      Either.traverse(List(1, 2))(i => {if (i == 1) Left(i) else Right(i)}) must_== Left(1)
+      Either.traverse(List(1, 2))(i => {if (i == 2) Left(i) else Right(i)}) must_== Left(2)
+      Either.traverse(List(1, 2, 3))(i => {if (i == 2) Left(i) else Right(i)}) must_== Left(2)
+    }
+
+    "give a Right List" in {
+      Either.traverse(List(1))(i => Right(i)) must_== Right(List(1))
+      Either.traverse(List(1, 2))(i => Right(i)) must_== Right(List(1, 2))
+
+    }
+  }
+
   "map2ViaForComprehension" should {
     "map 2 right to 1 right" in {
       Right(1).map2ViaForComprehension(Right(2))((a, b) => a + b) must_==Right(3)

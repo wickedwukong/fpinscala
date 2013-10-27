@@ -47,7 +47,9 @@ object Either {
     })
   }
 
-  def traverse[E, A, B](l: List[A])(f: A => Either[E, B]): Either[E, List[B]]= ???
+  def traverse[E, A, B](l: List[A])(f: A => Either[E, B]): Either[E, List[B]]= {
+    sequenceViaFoldLeft(l.map(f))
+  }
 
 
   def mean(xs: IndexedSeq[Double]): Either[String, Double] =
