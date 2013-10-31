@@ -1,12 +1,38 @@
 package fpinscala.laziness
 
-import Stream._
 
 trait Stream[+A] {
   def uncons: Option[(A, Stream[A])]
+
   def isEmpty: Boolean = uncons.isEmpty
 
-  def toList: List[A] = ???
+  def toList: List[A] = {
+    import scala.collection.mutable.ListBuffer
+    val buffer = ListBuffer[A]()
+
+    @annotation.tailrec
+    def go(stream: Stream[A]): List[A] = {
+      stream.uncons match {
+        case Some((a, tail)) => buffer += a; go(tail)
+        case _ => buffer.toList
+      }
+    }
+    go(this)
+  }
+
+  def toListViaFoldRight: List[A] = {
+    uncons.foldRight(List[A]())((a, list) => {
+      (a._1 :: list) ++ a._2.toListViaFoldRight
+    })
+  }
+
+  def toListViaFlatMap: List[A] = {
+    uncons.toList.flatMap {
+      case (a, tail) => {
+        a :: tail.toListViaFlatMap
+      }
+    }
+  }
 
   def foldRight[B](z: => B)(f: (A, => B) => B): B =
     uncons match {
@@ -14,28 +40,33 @@ trait Stream[+A] {
       case None => z
     }
 
-  def exists(p: A => Boolean): Boolean = 
+  def exists(p: A => Boolean): Boolean =
     foldRight(false)((a, b) => p(a) || b)
+
   def take(n: Int): Stream[A] = sys.error("todo")
 
   def takeWhile(p: A => Boolean): Stream[A] = sys.error("todo")
 
   def forAll(p: A => Boolean): Boolean = sys.error("todo")
 }
+
 object Stream {
-  def empty[A]: Stream[A] = 
-    new Stream[A] { def uncons = None }
-  
-  def cons[A](hd: => A, tl: => Stream[A]): Stream[A] = 
+  def empty[A]: Stream[A] =
     new Stream[A] {
-      lazy val uncons = Some((hd, tl)) 
+      def uncons = None
     }
-  
+
+  def cons[A](hd: => A, tl: => Stream[A]): Stream[A] =
+    new Stream[A] {
+      lazy val uncons = Some((hd, tl))
+    }
+
   def apply[A](as: A*): Stream[A] =
     if (as.isEmpty) empty
     else cons(as.head, apply(as.tail: _*))
 
   val ones: Stream[Int] = cons(1, ones)
+
   def from(n: Int): Stream[Int] = sys.error("todo")
 
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
