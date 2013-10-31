@@ -24,4 +24,24 @@ class StreamSpec extends Specification {
     }
   }
 
+  "take" should {
+    "give an empty stream for 0" in {
+      Stream(1).takeNonTailRec(0).toList must_== Stream.empty.toList
+    }
+
+    "give 1-element stream for 1" in {
+      Stream(1,2).takeNonTailRec(1).toList must_== Stream(1).toList
+    }
+
+    "give a 2-element stream for 2" in {
+      Stream(1,2).takeNonTailRec(2).toList must_== Stream(1,2).toList
+      Stream(1,2, 3).takeNonTailRec(2).toList must_== Stream(1,2).toList
+    }
+
+    "give the whole stream for n > the stream length" in {
+      Stream(1).takeNonTailRec(2).toList must_== Stream(1).toList
+      Stream(1,2).takeNonTailRec(3).toList must_== Stream(1,2).toList
+    }
+  }
+
 }

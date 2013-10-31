@@ -1,5 +1,7 @@
 package fpinscala.laziness
 
+import scala.annotation.tailrec
+
 
 trait Stream[+A] {
   def uncons: Option[(A, Stream[A])]
@@ -43,7 +45,20 @@ trait Stream[+A] {
   def exists(p: A => Boolean): Boolean =
     foldRight(false)((a, b) => p(a) || b)
 
-  def take(n: Int): Stream[A] = sys.error("todo")
+  def takeNonTailRec(n: Int): Stream[A] = {
+    def go(stream: Stream[A], n: Int): Stream[A] = {
+      if (n > 0) {
+        stream.uncons match {
+          case Some((a, tail)) => Stream.cons(a, go(tail, n - 1))
+          case None => Stream.empty
+        }
+      } else {
+        Stream.empty[A]
+      }
+    }
+
+    go(this, n)
+  }
 
   def takeWhile(p: A => Boolean): Stream[A] = sys.error("todo")
 
