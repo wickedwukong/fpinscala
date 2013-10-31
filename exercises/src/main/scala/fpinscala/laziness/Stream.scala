@@ -5,6 +5,9 @@ import Stream._
 trait Stream[+A] {
   def uncons: Option[(A, Stream[A])]
   def isEmpty: Boolean = uncons.isEmpty
+
+  def toList: List[A] = ???
+
   def foldRight[B](z: => B)(f: (A, => B) => B): B =
     uncons match {
       case Some((h, t)) => f(h, t.foldRight(z)(f))
