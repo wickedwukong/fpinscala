@@ -1,6 +1,7 @@
 package fpinscala.laziness
 
 import scala.annotation.tailrec
+import scala.collection.mutable.ListBuffer
 
 
 trait Stream[+A] {
@@ -45,19 +46,23 @@ trait Stream[+A] {
   def exists(p: A => Boolean): Boolean =
     foldRight(false)((a, b) => p(a) || b)
 
-  def takeNonTailRec(n: Int): Stream[A] = {
-    def go(stream: Stream[A], n: Int): Stream[A] = {
-      if (n > 0) {
-        stream.uncons match {
-          case Some((a, tail)) => Stream.cons(a, go(tail, n - 1))
-          case None => Stream.empty
-        }
-      } else {
-        Stream.empty[A]
-      }
+  def takeNonTailRec(n: Int): Stream[A] = uncons match {
+    case Some((h,t)) if n > 0 => Stream.cons(h, t.takeNonTailRec(n-1))
+    case _ => Stream()
+  }
+
+  def take(n: Int): Stream[A] = {
+    var buffer = ListBuffer[A]()
+    @tailrec
+    def go(stream: Stream[A], n: Int): Unit = stream.uncons match {
+      case Some((a, tail)) if (n > 0) => buffer += a; go(tail, n-1)
+      case _ =>
     }
 
     go(this, n)
+    println(buffer)
+
+    Stream.apply(buffer: _*)
   }
 
   def takeWhile(p: A => Boolean): Stream[A] = sys.error("todo")
