@@ -60,7 +60,6 @@ trait Stream[+A] {
     }
 
     go(this, n)
-    println(buffer)
 
     Stream.apply(buffer: _*)
   }
