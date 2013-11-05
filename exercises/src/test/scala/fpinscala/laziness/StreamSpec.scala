@@ -67,17 +67,23 @@ class StreamSpec extends Specification {
   "forAll" should {
     "be true for empty stream" in {
       Stream.empty[Int].forAll( (_) => true) must_== true
+      Stream.empty[Int].forAllViaFoldRight( (_) => true) must_== true
     }
 
     "be true when every element evaluates to true" in {
       Stream(1,2,3).forAll(Int => true) must_== true
+      Stream(1,2,3).forAllViaFoldRight(Int => true) must_== true
     }
 
     "be false when at least one element evaluates to false" in {
       Stream(1,2,3).forAll((_) => false) must_== false
+      Stream(1,2,3).forAllViaFoldRight((_) => false) must_== false
       Stream(1,2,3).forAll((a) => { if (a == 1) false else true }) must_== false
+      Stream(1,2,3).forAllViaFoldRight((a) => { if (a == 1) false else true }) must_== false
       Stream(1,2,3).forAll((a) => if (a == 2) false else true) must_== false
+      Stream(1,2,3).forAllViaFoldRight((a) => if (a == 2) false else true) must_== false
       Stream(1,2,3).forAll((a) => if (a == 3) false else true) must_== false
+      Stream(1,2,3).forAllViaFoldRight((a) => if (a == 3) false else true) must_== false
     }
   }
 

@@ -76,9 +76,14 @@ trait Stream[+A] {
     }
   }
 
+
   def forAll(p: A => Boolean): Boolean = uncons match {
     case Some((a, tail)) => p(a) && tail.forAll(p)
     case _ => true
+  }
+
+  def forAllViaFoldRight(p: A => Boolean): Boolean = {
+    foldRight(true)((a, acc) => p(a) && acc)
   }
 }
 
