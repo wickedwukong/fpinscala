@@ -76,7 +76,10 @@ trait Stream[+A] {
     }
   }
 
-  def forAll(p: A => Boolean): Boolean = sys.error("todo")
+  def forAll(p: A => Boolean): Boolean = uncons match {
+    case Some((a, tail)) => p(a) && tail.forAll(p)
+    case _ => true
+  }
 }
 
 object Stream {
