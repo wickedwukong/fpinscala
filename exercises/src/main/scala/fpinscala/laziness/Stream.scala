@@ -2,6 +2,7 @@ package fpinscala.laziness
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
+import Stream._
 
 
 trait Stream[+A] {
@@ -73,6 +74,12 @@ trait Stream[+A] {
           Stream.empty[A]
       }
       case _ => Stream.empty[A]
+    }
+  }
+
+  def takeWhileViaFoldRight(p: A => Boolean): Stream[A] = {
+    foldRight(Stream.empty[A]){
+      (a, stream) => if (p(a)) Stream.cons(a, stream) else empty
     }
   }
 

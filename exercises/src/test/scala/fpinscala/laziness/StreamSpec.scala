@@ -48,12 +48,13 @@ class StreamSpec extends Specification {
     }
   }
 
-  "takeWhile" should {
+  "takeWhile and takeWhileViaFoldRight" should {
     "take no element when f evaluates to false" in {
       Stream(1,2,3).takeWhile(a => false).toList must_== Stream.empty.toList
+      Stream(1,2,3).takeWhileViaFoldRight(a => false).toList must_== Stream.empty.toList
     }
 
-    "take elements when f evluates to true" in {
+    "take elements when f evaluates to true" in {
       Stream(1,2,3).takeWhile(a => true).toList must_== Stream(1,2,3).toList
       Stream(1,2,3).takeWhile(a => a > 0).toList must_== Stream(1,2,3).toList
       Stream(1,2,3).takeWhile(a => a > 1).toList must_== Stream.empty.toList
@@ -61,8 +62,17 @@ class StreamSpec extends Specification {
       Stream(1,2,3).takeWhile(a => a < 3).toList must_== Stream(1, 2).toList
       Stream(1,2,3).takeWhile(a => a == 1).toList must_== Stream(1).toList
       Stream(1,2,3).takeWhile(a => a < 4).toList must_== Stream(1,2,3).toList
+
+      Stream(1,2,3).takeWhileViaFoldRight(a => true).toList must_== Stream(1,2,3).toList
+      Stream(1,2,3).takeWhileViaFoldRight(a => a > 0).toList must_== Stream(1,2,3).toList
+      Stream(1,2,3).takeWhileViaFoldRight(a => a > 1).toList must_== Stream.empty.toList
+      Stream(1,2,3).takeWhileViaFoldRight(a => a < 2).toList must_== Stream(1).toList
+      Stream(1,2,3).takeWhileViaFoldRight(a => a < 3).toList must_== Stream(1, 2).toList
+      Stream(1,2,3).takeWhileViaFoldRight(a => a == 1).toList must_== Stream(1).toList
+      Stream(1,2,3).takeWhileViaFoldRight(a => a < 4).toList must_== Stream(1,2,3).toList
     }
   }
+
 
   "forAll" should {
     "be true for empty stream" in {
