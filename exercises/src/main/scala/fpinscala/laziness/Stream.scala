@@ -92,6 +92,12 @@ trait Stream[+A] {
   def forAllViaFoldRight(p: A => Boolean): Boolean = {
     foldRight(true)((a, acc) => p(a) && acc)
   }
+
+  def map[B](f: => A => B): Stream[B] = {
+    foldRight(Stream.empty[B]){
+      (a, stream) => cons(f(a), stream)
+    }
+  }
 }
 
 object Stream {

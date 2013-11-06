@@ -31,69 +31,83 @@ class StreamSpec extends Specification {
     }
 
     "give 1-element stream for 1" in {
-      Stream(1,2).takeNonTailRec(1).toList must_== Stream(1).toList
-      Stream(1,2).take(1).toList must_== Stream(1).toList
+      Stream(1, 2).takeNonTailRec(1).toList must_== Stream(1).toList
+      Stream(1, 2).take(1).toList must_== Stream(1).toList
     }
 
     "give a 2-element stream for 2" in {
-      Stream(1,2).takeNonTailRec(2).toList must_== Stream(1,2).toList
-      Stream(1,2).take(2).toList must_== Stream(1,2).toList
-      Stream(1,2, 3).takeNonTailRec(2).toList must_== Stream(1,2).toList
-      Stream(1,2, 3).take(2).toList must_== Stream(1,2).toList
+      Stream(1, 2).takeNonTailRec(2).toList must_== Stream(1, 2).toList
+      Stream(1, 2).take(2).toList must_== Stream(1, 2).toList
+      Stream(1, 2, 3).takeNonTailRec(2).toList must_== Stream(1, 2).toList
+      Stream(1, 2, 3).take(2).toList must_== Stream(1, 2).toList
     }
 
     "give the whole stream for n > the stream length" in {
       Stream(1).takeNonTailRec(2).toList must_== Stream(1).toList
-      Stream(1,2).takeNonTailRec(3).toList must_== Stream(1,2).toList
+      Stream(1, 2).takeNonTailRec(3).toList must_== Stream(1, 2).toList
     }
   }
 
   "takeWhile and takeWhileViaFoldRight" should {
     "take no element when f evaluates to false" in {
-      Stream(1,2,3).takeWhile(a => false).toList must_== Stream.empty.toList
-      Stream(1,2,3).takeWhileViaFoldRight(a => false).toList must_== Stream.empty.toList
+      Stream(1, 2, 3).takeWhile(a => false).toList must_== Stream.empty.toList
+      Stream(1, 2, 3).takeWhileViaFoldRight(a => false).toList must_== Stream.empty.toList
     }
 
     "take elements when f evaluates to true" in {
-      Stream(1,2,3).takeWhile(a => true).toList must_== Stream(1,2,3).toList
-      Stream(1,2,3).takeWhile(a => a > 0).toList must_== Stream(1,2,3).toList
-      Stream(1,2,3).takeWhile(a => a > 1).toList must_== Stream.empty.toList
-      Stream(1,2,3).takeWhile(a => a < 2).toList must_== Stream(1).toList
-      Stream(1,2,3).takeWhile(a => a < 3).toList must_== Stream(1, 2).toList
-      Stream(1,2,3).takeWhile(a => a == 1).toList must_== Stream(1).toList
-      Stream(1,2,3).takeWhile(a => a < 4).toList must_== Stream(1,2,3).toList
+      Stream(1, 2, 3).takeWhile(a => true).toList must_== Stream(1, 2, 3).toList
+      Stream(1, 2, 3).takeWhile(a => a > 0).toList must_== Stream(1, 2, 3).toList
+      Stream(1, 2, 3).takeWhile(a => a > 1).toList must_== Stream.empty.toList
+      Stream(1, 2, 3).takeWhile(a => a < 2).toList must_== Stream(1).toList
+      Stream(1, 2, 3).takeWhile(a => a < 3).toList must_== Stream(1, 2).toList
+      Stream(1, 2, 3).takeWhile(a => a == 1).toList must_== Stream(1).toList
+      Stream(1, 2, 3).takeWhile(a => a < 4).toList must_== Stream(1, 2, 3).toList
 
-      Stream(1,2,3).takeWhileViaFoldRight(a => true).toList must_== Stream(1,2,3).toList
-      Stream(1,2,3).takeWhileViaFoldRight(a => a > 0).toList must_== Stream(1,2,3).toList
-      Stream(1,2,3).takeWhileViaFoldRight(a => a > 1).toList must_== Stream.empty.toList
-      Stream(1,2,3).takeWhileViaFoldRight(a => a < 2).toList must_== Stream(1).toList
-      Stream(1,2,3).takeWhileViaFoldRight(a => a < 3).toList must_== Stream(1, 2).toList
-      Stream(1,2,3).takeWhileViaFoldRight(a => a == 1).toList must_== Stream(1).toList
-      Stream(1,2,3).takeWhileViaFoldRight(a => a < 4).toList must_== Stream(1,2,3).toList
+      Stream(1, 2, 3).takeWhileViaFoldRight(a => true).toList must_== Stream(1, 2, 3).toList
+      Stream(1, 2, 3).takeWhileViaFoldRight(a => a > 0).toList must_== Stream(1, 2, 3).toList
+      Stream(1, 2, 3).takeWhileViaFoldRight(a => a > 1).toList must_== Stream.empty.toList
+      Stream(1, 2, 3).takeWhileViaFoldRight(a => a < 2).toList must_== Stream(1).toList
+      Stream(1, 2, 3).takeWhileViaFoldRight(a => a < 3).toList must_== Stream(1, 2).toList
+      Stream(1, 2, 3).takeWhileViaFoldRight(a => a == 1).toList must_== Stream(1).toList
+      Stream(1, 2, 3).takeWhileViaFoldRight(a => a < 4).toList must_== Stream(1, 2, 3).toList
     }
   }
 
 
   "forAll" should {
     "be true for empty stream" in {
-      Stream.empty[Int].forAll( (_) => true) must_== true
-      Stream.empty[Int].forAllViaFoldRight( (_) => true) must_== true
+      Stream.empty[Int].forAll((_) => true) must_== true
+      Stream.empty[Int].forAllViaFoldRight((_) => true) must_== true
     }
 
     "be true when every element evaluates to true" in {
-      Stream(1,2,3).forAll(Int => true) must_== true
-      Stream(1,2,3).forAllViaFoldRight(Int => true) must_== true
+      Stream(1, 2, 3).forAll(Int => true) must_== true
+      Stream(1, 2, 3).forAllViaFoldRight(Int => true) must_== true
     }
 
     "be false when at least one element evaluates to false" in {
-      Stream(1,2,3).forAll((_) => false) must_== false
-      Stream(1,2,3).forAllViaFoldRight((_) => false) must_== false
-      Stream(1,2,3).forAll((a) => { if (a == 1) false else true }) must_== false
-      Stream(1,2,3).forAllViaFoldRight((a) => { if (a == 1) false else true }) must_== false
-      Stream(1,2,3).forAll((a) => if (a == 2) false else true) must_== false
-      Stream(1,2,3).forAllViaFoldRight((a) => if (a == 2) false else true) must_== false
-      Stream(1,2,3).forAll((a) => if (a == 3) false else true) must_== false
-      Stream(1,2,3).forAllViaFoldRight((a) => if (a == 3) false else true) must_== false
+      Stream(1, 2, 3).forAll((_) => false) must_== false
+      Stream(1, 2, 3).forAllViaFoldRight((_) => false) must_== false
+      Stream(1, 2, 3).forAll((a) => {
+        if (a == 1) false else true
+      }) must_== false
+      Stream(1, 2, 3).forAllViaFoldRight((a) => {
+        if (a == 1) false else true
+      }) must_== false
+      Stream(1, 2, 3).forAll((a) => if (a == 2) false else true) must_== false
+      Stream(1, 2, 3).forAllViaFoldRight((a) => if (a == 2) false else true) must_== false
+      Stream(1, 2, 3).forAll((a) => if (a == 3) false else true) must_== false
+      Stream(1, 2, 3).forAllViaFoldRight((a) => if (a == 3) false else true) must_== false
+    }
+  }
+
+  "map" should {
+    "transform an empty stream to an empty stream" in {
+      Stream.empty[Int].map(_ => "hello").toList must_== Nil
+    }
+
+    "transform an non-empty stream" in {
+      Stream(1, 2, 3).map(_ + 10).toList must_== List(11, 12, 13)
     }
   }
 
