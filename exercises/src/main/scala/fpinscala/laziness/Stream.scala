@@ -98,6 +98,12 @@ trait Stream[+A] {
       (a, stream) => cons(f(a), stream)
     }
   }
+
+  def filter(f: => A => Boolean): Stream[A] = {
+    foldRight(Stream.empty[A]){
+      (a, stream) => if (f(a)) cons(a, stream) else stream
+    }
+  }
 }
 
 object Stream {

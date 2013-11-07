@@ -111,4 +111,12 @@ class StreamSpec extends Specification {
     }
   }
 
+  "filter" should {
+    "include items evaluate to true, and exclude items evaluate to false" in {
+      Stream(1,2,3).filter(_ => true).toList must_== List(1,2,3)
+      Stream(1,2,3).filter(_ => false).toList must_== Nil
+      Stream(1,2,3).filter(a => a > 2).toList must_== List(3)
+    }
+  }
+
 }
