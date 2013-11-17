@@ -104,6 +104,8 @@ trait Stream[+A] {
       (a, stream) => if (f(a)) cons(a, stream) else stream
     }
   }
+
+  def append[B >: A](streamB: Stream[B]): Stream[B] = foldRight(streamB){(a, stream) => cons(a, stream)}
 }
 
 object Stream {

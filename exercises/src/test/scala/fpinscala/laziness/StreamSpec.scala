@@ -119,4 +119,19 @@ class StreamSpec extends Specification {
     }
   }
 
+  "append" should {
+    "append empty stream" in {
+      Stream.empty[Int].append(Stream.empty[Int]).toList must_== Nil
+      Stream(1).append(Stream.empty[Int]).toList must_== List(1)
+      Stream(1,2).append(Stream.empty[Int]).toList must_== List(1,2)
+    }
+
+    "append non-empty stream" in {
+      Stream.empty[Int].append(Stream(1)).toList must_== List(1)
+      Stream(1).append(Stream(2)).toList must_== List(1,2)
+      Stream(1).append(Stream(2,3)).toList must_== List(1,2,3)
+      Stream(1,2).append(Stream(3,4)).toList must_== List(1,2,3,4)
+    }
+  }
+
 }
