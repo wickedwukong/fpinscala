@@ -134,4 +134,21 @@ class StreamSpec extends Specification {
     }
   }
 
+  "flatMap" in {
+    "transform empty stream to empty stream" in {
+      Stream.empty[Int].flatMap(a => Stream("abc")).toList must_== Nil
+    }
+
+    "transform and flatten stream" in {
+      Stream(1,2).flatMap(a => Stream("a")).toList must_== List("a", "a")
+      Stream(1,2).flatMap(a => Stream(a, a + 1)).toList must_== List(1, 2, 2, 3)
+      Stream(1,2).flatMap(a => Stream(s"${a}", s"${a + 1}")).toList must_== List("1", "2", "2", "3")
+    }
+
+    "not contain empty stream" in {
+      Stream(1,2).flatMap(a => Stream.empty).toList must_== Nil
+      Stream(1,2).flatMap(a => if (a > 1) Stream.empty else Stream(a, a + 1)).toList must_== List(1, 2)
+    }
+  }
+
 }
