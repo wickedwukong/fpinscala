@@ -112,6 +112,10 @@ trait Stream[+A] {
 //    foldRight(empty[B])((h,t) => f(h) append t)
 
   }
+
+  def find(p: A => Boolean): Option[A] = filter(p).uncons.map(_._1)
+
+
 }
 
 object Stream {
@@ -129,7 +133,10 @@ object Stream {
     if (as.isEmpty) empty
     else cons(as.head, apply(as.tail: _*))
 
-  val ones: Stream[Int] = cons(1, ones)
+  val ones: Stream[Int] = constant(1)
+
+  def constant[A](a: A): Stream[A] = cons(a, constant(a))
+
 
   def from(n: Int): Stream[Int] = sys.error("todo")
 

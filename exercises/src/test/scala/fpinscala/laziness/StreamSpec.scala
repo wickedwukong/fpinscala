@@ -134,7 +134,7 @@ class StreamSpec extends Specification {
     }
   }
 
-  "flatMap" in {
+  "flatMap" should {
     "transform empty stream to empty stream" in {
       Stream.empty[Int].flatMap(a => Stream("abc")).toList must_== Nil
     }
@@ -148,6 +148,13 @@ class StreamSpec extends Specification {
     "not contain empty stream" in {
       Stream(1,2).flatMap(a => Stream.empty).toList must_== Nil
       Stream(1,2).flatMap(a => if (a > 1) Stream.empty else Stream(a, a + 1)).toList must_== List(1, 2)
+    }
+  }
+
+  "constant" should {
+    "give constantants" in {
+      Stream.constant(1).take(5).toList must_== List(1,1,1,1,1)
+      Stream.constant("a").take(3).toList must_== List("a", "a", "a")
     }
   }
 
