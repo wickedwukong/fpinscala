@@ -145,6 +145,16 @@ object Stream {
     def uncons = Some((n, from(n + 1)))
   }
 
+  def fibs:Stream[Int] =  {
+
+    def go(state: Int, nextVal: Int): Stream[Int] = new Stream[Int] {
+      def uncons = Some((state, go(nextVal, state + nextVal)))
+
+    }
+
+    go(0, 1)
+  }
+
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
 
   def startsWith[A](s: Stream[A], s2: Stream[A]): Boolean = sys.error("todo")
