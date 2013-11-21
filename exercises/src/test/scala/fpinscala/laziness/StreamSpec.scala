@@ -154,7 +154,9 @@ class StreamSpec extends Specification {
   "constant" should {
     "give constantants" in {
       Stream.constant(1).take(5).toList must_== List(1,1,1,1,1)
+      Stream.constantViaUnfold(1).take(5).toList must_== List(1,1,1,1,1)
       Stream.constant("a").take(3).toList must_== List("a", "a", "a")
+      Stream.constantViaUnfold("a").take(3).toList must_== List("a", "a", "a")
     }
   }
 
