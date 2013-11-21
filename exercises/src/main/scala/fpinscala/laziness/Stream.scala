@@ -155,7 +155,16 @@ object Stream {
     go(0, 1)
   }
 
-  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
+  def fibsViaUnfold:Stream[Int] =  {
+    cons(0, unfold((0, 1)){case (a, b) => Some((b, (b, a + b)))})
+  }
+
+  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = {
+    f(z) match {
+      case Some((a, s)) => cons(a, unfold(s)(f))
+      case None => Stream.empty[A]
+    }
+  }
 
   def startsWith[A](s: Stream[A], s2: Stream[A]): Boolean = sys.error("todo")
 }

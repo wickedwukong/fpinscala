@@ -171,14 +171,21 @@ class StreamSpec extends Specification {
   "fibs" should {
     "do this" in {
       Stream.fibs.take(1).toList must_== List(0)
+      Stream.fibsViaUnfold.take(1).toList must_== List(0)
       Stream.fibs.take(2).toList must_== List(0, 1)
+      Stream.fibsViaUnfold.take(2).toList must_== List(0, 1)
       Stream.fibs.take(3).toList must_== List(0, 1, 1)
+      Stream.fibsViaUnfold.take(3).toList must_== List(0, 1, 1)
       Stream.fibs.take(4).toList must_== List(0, 1, 1, 2)
+      Stream.fibsViaUnfold.take(4).toList must_== List(0, 1, 1, 2)
       Stream.fibs.take(5).toList must_== List(0, 1, 1, 2, 3)
+      Stream.fibsViaUnfold.take(5).toList must_== List(0, 1, 1, 2, 3)
       Stream.fibs.take(6).toList must_== List(0, 1, 1, 2, 3, 5)
+      Stream.fibsViaUnfold.take(6).toList must_== List(0, 1, 1, 2, 3, 5)
       Stream.fibs.take(7).toList must_== List(0, 1, 1, 2, 3, 5,8)
+      Stream.fibsViaUnfold.take(7).toList must_== List(0, 1, 1, 2, 3, 5,8)
 
-      val longFibList = Stream.fibs.take(200).toList
+      val longFibList = Stream.fibsViaUnfold.take(200).toList
 
       longFibList(199) must_== longFibList(197) + longFibList(198)
     }
