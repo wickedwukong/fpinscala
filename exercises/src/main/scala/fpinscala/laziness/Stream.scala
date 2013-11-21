@@ -99,7 +99,15 @@ trait Stream[+A] {
     }
   }
 
-  def filter(f: => A => Boolean): Stream[A] = {
+  def mapViaUnfold[B](f: => A => B): Stream[B] = unfold(this)(
+    stream => stream.uncons match {
+      case Some((a, s)) => Some(f(a), s)
+      case _ => None
+    }
+  )
+
+
+    def filter(f: => A => Boolean): Stream[A] = {
     foldRight(Stream.empty[A]){
       (a, stream) => if (f(a)) cons(a, stream) else stream
     }
@@ -110,7 +118,6 @@ trait Stream[+A] {
   def flatMap[B](f: A => Stream[B]): Stream[B] = {
     foldRight(Stream.empty[B])((h, t) => f(h).foldRight(t)((h1, t1) => cons(h1, t1)))
 //    foldRight(empty[B])((h,t) => f(h) append t)
-
   }
 
   def find(p: A => Boolean): Option[A] = filter(p).uncons.map(_._1)

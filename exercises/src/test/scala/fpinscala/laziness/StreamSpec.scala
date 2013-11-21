@@ -104,10 +104,12 @@ class StreamSpec extends Specification {
   "map" should {
     "transform an empty stream to an empty stream" in {
       Stream.empty[Int].map(_ => "hello").toList must_== Nil
+      Stream.empty[Int].mapViaUnfold(_ => "hello").toList must_== Nil
     }
 
     "transform an non-empty stream" in {
       Stream(1, 2, 3).map(_ + 10).toList must_== List(11, 12, 13)
+      Stream(1, 2, 3).mapViaUnfold(_ + 10).toList must_== List(11, 12, 13)
     }
   }
 
