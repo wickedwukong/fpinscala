@@ -145,6 +145,8 @@ object Stream {
     def uncons = Some((n, from(n + 1)))
   }
 
+  def fromViaUnfold(n: Int): Stream[Int] = unfold(n)(s => Some((s, s + 1)))
+
   def fibs:Stream[Int] =  {
 
     def go(state: Int, nextVal: Int): Stream[Int] = new Stream[Int] {

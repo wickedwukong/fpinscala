@@ -161,10 +161,15 @@ class StreamSpec extends Specification {
   "from" should {
     "start from an initial number" in {
       Stream.from(1).take(1).toList must_== List(1)
+      Stream.fromViaUnfold(1).take(1).toList must_== List(1)
       Stream.from(100).take(5).toList must_== List(100, 101, 102, 103, 104)
+      Stream.fromViaUnfold(100).take(5).toList must_== List(100, 101, 102, 103, 104)
       Stream.from(100).take(100).toList.size must_== 100
+      Stream.fromViaUnfold(100).take(100).toList.size must_== 100
       Stream.from(100).take(100).toList(99) must_== 199
+      Stream.fromViaUnfold(100).take(100).toList(99) must_== 199
       Stream.from(1).take(1000).toList(1000 - 1) must_== 1000
+      Stream.fromViaUnfold(1).take(1000).toList(1000 - 1) must_== 1000
     }
   }
 
