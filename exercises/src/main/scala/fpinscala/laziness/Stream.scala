@@ -80,6 +80,13 @@ trait Stream[+A] {
     Stream.apply(buffer: _*)
   }
 
+  def takeWhileViaUnfold(p: A => Boolean): Stream[A] = {
+    unfold(this)(stream => stream.uncons match {
+      case s@Some((h, _)) if(p(h)) => s
+      case _ => None
+    })
+  }
+
   def takeWhile(p: A => Boolean): Stream[A] = {
     uncons match {
       case Some((a, tail)) => {
