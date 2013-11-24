@@ -239,4 +239,15 @@ class StreamSpec extends Specification {
     }
   }
 
+  "zipAl" should {
+    "zip two empty stream" in {
+      Stream.empty[Int].zip(Stream.empty[String]).toList must_== List[(Option[Int], Option[String])]()
+    }
+
+    "zip one non empty stream and one empty stream" in {
+      Stream(1).zip(Stream.empty[String]).toList must_== List[(Option[Int], Option[String])]((Some(1), None))
+      Stream(1,2).zip(Stream.empty[String]).toList must_== List[(Option[Int], Option[String])]((Some(1), None),(Some(2), None))
+    }
+  }
+
 }
