@@ -146,6 +146,7 @@ trait Stream[+A] {
 
   def find(p: A => Boolean): Option[A] = filter(p).uncons.map(_._1)
 
+  def zip[B](s2: Stream[B]): Stream[(A, B)] = ???
 
 }
 

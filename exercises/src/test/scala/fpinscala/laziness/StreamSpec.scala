@@ -217,4 +217,26 @@ class StreamSpec extends Specification {
     }
   }
 
+  "zip" should {
+    "zip two empty stream" in {
+      Stream.empty[Int].zip(Stream.empty[String]).toList must_== List[(Int, String)]()
+    }
+
+    "zip two Steam of equal number of elements" in {
+      Stream(1).zip(Stream("a")).toList must_== List((1, "a"))
+      Stream(1,2).zip(Stream("a", "b")).toList must_== List((1, "a"), (2,"b"))
+    }
+
+    "zip two Steam of non-equal number of elements" in {
+      Stream(1,2).zip(Stream.empty[String]).toList must_== List[(Int, String)]()
+      Stream(1,2).zip(Stream("a")).toList must_== List((1, "a"))
+      Stream(1,2,3).zip(Stream("a", "b")).toList must_== List((1, "a"),(2,"b"))
+      Stream(1,2).zip(Stream("a", "b", "c")).toList must_== List((1, "a"),(2,"b"))
+    }
+
+    "zip two Steam of infinite number of elements" in {
+      Stream.ones.zip(Stream.constant("a")).take(5).toList must_== List((1,"a"),(1,"a"),(1,"a"),(1,"a"),(1,"a"))
+    }
+  }
+
 }
