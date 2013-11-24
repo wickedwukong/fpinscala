@@ -53,18 +53,22 @@ trait Stream[+A] {
   }
 
   def takeViaUnfold(n: Int): Stream[A] = {
-    unfold((n, this)){
-      case (m, originalStream) if (m > 0) => originalStream.uncons.map{case (h, t) => (h, (m - 1, t))}
+    unfold((n, this)) {
+      case (m, originalStream) if (m > 0) => originalStream.uncons.map {
+        case (h, t) => (h, (m - 1, t))
+      }
       case _ => None
 
     }
   }
 
   def takeViaUnfold_1(n: Int): Stream[A] = {
-    unfold((n, this)){case (m, originalStream) => originalStream.uncons match {
-      case Some((h, t)) if (m > 0) => Some((h, (m - 1, t)))
-      case _ => None
-    }}
+    unfold((n, this)) {
+      case (m, originalStream) => originalStream.uncons match {
+        case Some((h, t)) if (m > 0) => Some((h, (m - 1, t)))
+        case _ => None
+      }
+    }
   }
 
   def take(n: Int): Stream[A] = {
@@ -82,7 +86,7 @@ trait Stream[+A] {
 
   def takeWhileViaUnfold(p: A => Boolean): Stream[A] = {
     unfold(this)(stream => stream.uncons match {
-      case s@Some((h, _)) if(p(h)) => s
+      case s@Some((h, _)) if (p(h)) => s
       case _ => None
     })
   }
@@ -146,8 +150,14 @@ trait Stream[+A] {
 
   def find(p: A => Boolean): Option[A] = filter(p).uncons.map(_._1)
 
-  def zip[B](s2: Stream[B]): Stream[(A, B)] = ???
-
+  def zip[B](s2: Stream[B]): Stream[(A, B)] = {
+    unfold((this, s2)) {
+      case (s1, s2) => (s1.uncons, s2.uncons) match {
+        case (Some((h1, t1)), Some((h2, t2))) => Some((h1, h2), (t1, t2))
+        case _ => None
+      }
+    }
+  }
 }
 
 object Stream {
