@@ -150,13 +150,17 @@ trait Stream[+A] {
 
   def find(p: A => Boolean): Option[A] = filter(p).uncons.map(_._1)
 
-  def zip[B](s2: Stream[B]): Stream[(A, B)] = {
+  def zipWith[B, C](s2: Stream[B])(f: => (A, B) => C): Stream[C] = {
     unfold((this, s2)) {
       case (s1, s2) => (s1.uncons, s2.uncons) match {
-        case (Some((h1, t1)), Some((h2, t2))) => Some((h1, h2), (t1, t2))
+        case (Some((h1, t1)), Some((h2, t2))) => Some(f(h1, h2), (t1, t2))
         case _ => None
       }
     }
+  }
+
+  def zip[B](s2: Stream[B]): Stream[(A, B)] = {
+    zipWith(s2)((_,_))
   }
 }
 
