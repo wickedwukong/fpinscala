@@ -267,4 +267,23 @@ class StreamSpec extends Specification {
 
   }
 
+  "hasSubsequence" should {
+    "have empty stream as subsequence" in {
+      Stream(1).hasSubsequence(Stream.empty[Int]) must_== true
+    }
+
+    "have no subsequence when the stream is empty" in {
+      Stream.empty[Int].hasSubsequence(Stream.empty[Int]) must_== false
+      Stream.empty[Int].hasSubsequence(Stream(1)) must_== false
+    }
+
+    "have no subsquence" in {
+      Stream(1).hasSubsequence(Stream(2)) must_== false
+      Stream(1).hasSubsequence(Stream(1, 2)) must_== false
+      Stream(1).hasSubsequence(Stream(2, 3)) must_== false
+      Stream(1, 2).hasSubsequence(Stream(2, 3)) must_== false
+      Stream(1, 1, 1).hasSubsequence(Stream.ones) must_== false
+    }
+  }
+
 }

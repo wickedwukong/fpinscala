@@ -175,6 +175,9 @@ trait Stream[+A] {
       }
     }
   }
+
+  def hasSubsequence(s2: Stream[A]): Boolean = ???
+
 }
 
 object Stream {
