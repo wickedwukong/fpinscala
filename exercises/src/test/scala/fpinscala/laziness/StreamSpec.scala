@@ -132,9 +132,9 @@ class StreamSpec extends Specification {
 
   "filter" should {
     "include items evaluate to true, and exclude items evaluate to false" in {
-      Stream(1,2,3).filter(_ => true).toList must_== List(1,2,3)
-      Stream(1,2,3).filter(_ => false).toList must_== Nil
-      Stream(1,2,3).filter(a => a > 2).toList must_== List(3)
+      Stream(1, 2, 3).filter(_ => true).toList must_== List(1, 2, 3)
+      Stream(1, 2, 3).filter(_ => false).toList must_== Nil
+      Stream(1, 2, 3).filter(a => a > 2).toList must_== List(3)
     }
   }
 
@@ -142,14 +142,14 @@ class StreamSpec extends Specification {
     "append empty stream" in {
       Stream.empty[Int].append(Stream.empty[Int]).toList must_== Nil
       Stream(1).append(Stream.empty[Int]).toList must_== List(1)
-      Stream(1,2).append(Stream.empty[Int]).toList must_== List(1,2)
+      Stream(1, 2).append(Stream.empty[Int]).toList must_== List(1, 2)
     }
 
     "append non-empty stream" in {
       Stream.empty[Int].append(Stream(1)).toList must_== List(1)
-      Stream(1).append(Stream(2)).toList must_== List(1,2)
-      Stream(1).append(Stream(2,3)).toList must_== List(1,2,3)
-      Stream(1,2).append(Stream(3,4)).toList must_== List(1,2,3,4)
+      Stream(1).append(Stream(2)).toList must_== List(1, 2)
+      Stream(1).append(Stream(2, 3)).toList must_== List(1, 2, 3)
+      Stream(1, 2).append(Stream(3, 4)).toList must_== List(1, 2, 3, 4)
     }
   }
 
@@ -159,21 +159,21 @@ class StreamSpec extends Specification {
     }
 
     "transform and flatten stream" in {
-      Stream(1,2).flatMap(a => Stream("a")).toList must_== List("a", "a")
-      Stream(1,2).flatMap(a => Stream(a, a + 1)).toList must_== List(1, 2, 2, 3)
-      Stream(1,2).flatMap(a => Stream(s"${a}", s"${a + 1}")).toList must_== List("1", "2", "2", "3")
+      Stream(1, 2).flatMap(a => Stream("a")).toList must_== List("a", "a")
+      Stream(1, 2).flatMap(a => Stream(a, a + 1)).toList must_== List(1, 2, 2, 3)
+      Stream(1, 2).flatMap(a => Stream(s"${a}", s"${a + 1}")).toList must_== List("1", "2", "2", "3")
     }
 
     "not contain empty stream" in {
-      Stream(1,2).flatMap(a => Stream.empty).toList must_== Nil
-      Stream(1,2).flatMap(a => if (a > 1) Stream.empty else Stream(a, a + 1)).toList must_== List(1, 2)
+      Stream(1, 2).flatMap(a => Stream.empty).toList must_== Nil
+      Stream(1, 2).flatMap(a => if (a > 1) Stream.empty else Stream(a, a + 1)).toList must_== List(1, 2)
     }
   }
 
   "constant" should {
     "give constantants" in {
-      Stream.constant(1).take(5).toList must_== List(1,1,1,1,1)
-      Stream.constantViaUnfold(1).take(5).toList must_== List(1,1,1,1,1)
+      Stream.constant(1).take(5).toList must_== List(1, 1, 1, 1, 1)
+      Stream.constantViaUnfold(1).take(5).toList must_== List(1, 1, 1, 1, 1)
       Stream.constant("a").take(3).toList must_== List("a", "a", "a")
       Stream.constantViaUnfold("a").take(3).toList must_== List("a", "a", "a")
     }
@@ -208,8 +208,8 @@ class StreamSpec extends Specification {
       Stream.fibsViaUnfold.take(5).toList must_== List(0, 1, 1, 2, 3)
       Stream.fibs.take(6).toList must_== List(0, 1, 1, 2, 3, 5)
       Stream.fibsViaUnfold.take(6).toList must_== List(0, 1, 1, 2, 3, 5)
-      Stream.fibs.take(7).toList must_== List(0, 1, 1, 2, 3, 5,8)
-      Stream.fibsViaUnfold.take(7).toList must_== List(0, 1, 1, 2, 3, 5,8)
+      Stream.fibs.take(7).toList must_== List(0, 1, 1, 2, 3, 5, 8)
+      Stream.fibsViaUnfold.take(7).toList must_== List(0, 1, 1, 2, 3, 5, 8)
 
       val longFibList = Stream.fibsViaUnfold.take(200).toList
 
@@ -224,30 +224,47 @@ class StreamSpec extends Specification {
 
     "zip two Steam of equal number of elements" in {
       Stream(1).zip(Stream("a")).toList must_== List((1, "a"))
-      Stream(1,2).zip(Stream("a", "b")).toList must_== List((1, "a"), (2,"b"))
+      Stream(1, 2).zip(Stream("a", "b")).toList must_== List((1, "a"), (2, "b"))
     }
 
     "zip two Steam of non-equal number of elements" in {
-      Stream(1,2).zip(Stream.empty[String]).toList must_== List[(Int, String)]()
-      Stream(1,2).zip(Stream("a")).toList must_== List((1, "a"))
-      Stream(1,2,3).zip(Stream("a", "b")).toList must_== List((1, "a"),(2,"b"))
-      Stream(1,2).zip(Stream("a", "b", "c")).toList must_== List((1, "a"),(2,"b"))
+      Stream(1, 2).zip(Stream.empty[String]).toList must_== List[(Int, String)]()
+      Stream(1, 2).zip(Stream("a")).toList must_== List((1, "a"))
+      Stream(1, 2, 3).zip(Stream("a", "b")).toList must_== List((1, "a"), (2, "b"))
+      Stream(1, 2).zip(Stream("a", "b", "c")).toList must_== List((1, "a"), (2, "b"))
     }
 
     "zip two Steam of infinite number of elements" in {
-      Stream.ones.zip(Stream.constant("a")).take(5).toList must_== List((1,"a"),(1,"a"),(1,"a"),(1,"a"),(1,"a"))
+      Stream.ones.zip(Stream.constant("a")).take(5).toList must_== List((1, "a"), (1, "a"), (1, "a"), (1, "a"), (1, "a"))
     }
   }
 
   "zipAl" should {
     "zip two empty stream" in {
-      Stream.empty[Int].zip(Stream.empty[String]).toList must_== List[(Option[Int], Option[String])]()
+      Stream.empty[Int].zipAll(Stream.empty[String]).toList must_== List[(Option[Int], Option[String])]()
     }
 
     "zip one non empty stream and one empty stream" in {
-      Stream(1).zip(Stream.empty[String]).toList must_== List[(Option[Int], Option[String])]((Some(1), None))
-      Stream(1,2).zip(Stream.empty[String]).toList must_== List[(Option[Int], Option[String])]((Some(1), None),(Some(2), None))
+      Stream(1).zipAll(Stream.empty[String]).toList must_== List[(Option[Int], Option[String])]((Some(1), None))
+      Stream(1, 2).zipAll(Stream.empty[String]).toList must_== List[(Option[Int], Option[String])]((Some(1), None), (Some(2), None))
     }
+
+    "zip two Steam of equal number of elements" in {
+      Stream(1).zipAll(Stream("a")).toList must_== List((Some(1), Some("a")))
+      Stream(1, 2).zipAll(Stream("a", "b")).toList must_== List((Some(1), Some("a")), (Some(2), Some("b")))
+    }
+
+    "zip two Steam of non-equal number of elements" in {
+      Stream(1, 2).zipAll(Stream.empty[String]).toList must_== List[(Option[Int], Option[String])]((Some(1), None), (Some(2), None))
+      Stream(1, 2).zipAll(Stream("a")).toList must_== List[(Option[Int], Option[String])]((Some(1), Some("a")), (Some(2), None))
+      Stream(1, 2, 3).zipAll(Stream("a", "b")).toList must_== List((Some(1), Some("a")), (Some(2), Some("b")), (Some(3), None))
+      Stream(1, 2).zipAll(Stream("a", "b", "c")).toList must_== List((Some(1), Some("a")), (Some(2), Some("b")), (None, Some("c")))
+    }
+
+    "zip two Steam of infinite number of elements" in {
+      Stream.ones.zipAll(Stream.constant("a")).take(5).toList must_== List((Some(1), Some("a")), (Some(1), Some("a")), (Some(1), Some("a")), (Some(1), Some("a")), (Some(1), Some("a")))
+    }
+
   }
 
 }

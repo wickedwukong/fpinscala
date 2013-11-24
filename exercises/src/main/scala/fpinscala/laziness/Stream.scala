@@ -160,10 +160,21 @@ trait Stream[+A] {
   }
 
   def zip[B](s2: Stream[B]): Stream[(A, B)] = {
-    zipWith(s2)((_,_))
+    zipWith(s2)((_, _))
   }
 
-  def zipAll[B](s2: Stream[B]):Stream[(Option[A], Option[B])] = ???
+  def zipAll[B](s2: Stream[B]): Stream[(Option[A], Option[B])] = {
+    unfold((this, s2)) {
+      case (s1, s2) => {
+        (s1.uncons, s2.uncons) match {
+          case (Some((h1, t1)), Some((h2, t2))) => Some((Some(h1), Some(h2)), (t1, t2))
+          case (Some((h1, t1)), None) => Some((Some(h1), None), (t1, Stream.empty[B]))
+          case (None, Some((h2, t2))) => Some((None, Some(h2)), (Stream.empty[A], t2))
+          case (None, None) => None
+        }
+      }
+    }
+  }
 }
 
 object Stream {
