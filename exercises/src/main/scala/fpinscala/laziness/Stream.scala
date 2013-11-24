@@ -176,8 +176,6 @@ trait Stream[+A] {
     }
   }
 
-  def hasSubsequence(s2: Stream[A]): Boolean = ???
-
 }
 
 object Stream {
@@ -235,6 +233,9 @@ object Stream {
       case None => Stream.empty[A]
     }
   }
+
+
+  def hasSubsequence[A](s1: Stream[A], s2: Stream[A]): Boolean = ???
 
   def startsWith[A](s: Stream[A], s2: Stream[A]): Boolean = sys.error("todo")
 }
