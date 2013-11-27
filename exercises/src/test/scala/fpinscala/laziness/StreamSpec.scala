@@ -267,25 +267,46 @@ class StreamSpec extends Specification {
 
   }
 
-  "hasSubsequence" should {
-    import Stream._
-
-    "have empty stream as subsequence" in {
-      hasSubsequence(Stream(1), Stream.empty[Int]) must_== true
+  "tails" should {
+    "give back empty stream when the stream is empty" in {
+      Stream.empty[Int].tails.map(_.toList).toList must_== Stream(Stream.empty[Int]).map(_.toList).toList
     }
-
-    "have no subsequence when the stream is empty" in {
-      hasSubsequence(Stream.empty[Int], Stream.empty[Int]) must_== false
-      hasSubsequence(Stream.empty[Int], Stream(1)) must_== false
-    }
-
-    "have no subsquence" in {
-      hasSubsequence(Stream(1), Stream(2)) must_== false
-      hasSubsequence(Stream(1), Stream(1, 2)) must_== false
-      hasSubsequence(Stream(1), Stream(2, 3)) must_== false
-      hasSubsequence(Stream(1, 2), Stream(2, 3)) must_== false
-      hasSubsequence(Stream(1, 1, 1), Stream.ones) must_== false
+    "give back a stream of suffix" in {
+      Stream(1).tails.map(_.toList).toList must_== Stream(Stream(1), Stream.empty[Int]).map(_.toList).toList
+      Stream(1, 2).tails.map(_.toList).toList must_== Stream(Stream(1, 2), Stream(2), Stream.empty[Int]).map(_.toList).toList
+      Stream(1, 2, 3).tails.map(_.toList).toList must_== Stream(Stream(1, 2, 3), Stream(2, 3), Stream(3), Stream.empty[Int]).map(_.toList).toList
     }
   }
+
+//  "hasSubsequence" should {
+//    import Stream._
+//
+//    "have empty stream as subsequence" in {
+//      hasSubsequence(Stream(1), Stream.empty[Int]) must_== true
+//    }
+//
+//    "have no subsequence when the stream is empty" in {
+//      hasSubsequence(Stream.empty[Int], Stream.empty[Int]) must_== false
+//      hasSubsequence(Stream.empty[Int], Stream(1)) must_== false
+//    }
+//
+//    "have no subsquence" in {
+//      hasSubsequence(Stream(1), Stream(2)) must_== false
+//      hasSubsequence(Stream(1), Stream(1, 2)) must_== false
+//      hasSubsequence(Stream(1), Stream(2, 3)) must_== false
+//      hasSubsequence(Stream(1, 2), Stream(2, 3)) must_== false
+//      hasSubsequence(Stream(1, 1, 1), Stream.ones) must_== false
+//    }
+//
+//    "be true" in {
+//      hasSubsequence(Stream(1), Stream(2)) must_== true
+//      hasSubsequence(Stream(1, 2), Stream(2)) must_== true
+//      hasSubsequence(Stream(1, 2), Stream(1)) must_== true
+//      hasSubsequence(Stream(1, 2), Stream(1, 2)) must_== true
+//      hasSubsequence(Stream(1, 2, 3), Stream(2, 3)) must_== true
+//      hasSubsequence(Stream(1, 2, 3, 4), Stream(2, 3)) must_== true
+//      hasSubsequence(Stream.ones, Stream.ones.take(100)) must_== true
+//    }
+//  }
 
 }

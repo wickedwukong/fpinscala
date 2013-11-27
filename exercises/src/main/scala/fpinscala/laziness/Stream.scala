@@ -176,6 +176,13 @@ trait Stream[+A] {
     }
   }
 
+  def tails: Stream[Stream[A]] = {
+    unfold(this) { s1 => s1.uncons match {
+        case Some((_, t1)) => Some((s1, t1))
+        case _ => None
+      }
+    }.append(Stream(Stream.empty[A]))
+  }
 }
 
 object Stream {
