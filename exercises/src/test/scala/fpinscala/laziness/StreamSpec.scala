@@ -278,6 +278,34 @@ class StreamSpec extends Specification {
     }
   }
 
+  "startsWith" should {
+    "report false for empty stream" in {
+      Stream.startsWith(Stream.empty[Int], Stream.empty[Int]) must_== true
+      Stream.startsWith(Stream(1), Stream.empty[Int]) must_== true
+    }
+
+    "report false when the stream 1 does not start with stream 2" in {
+      Stream.startsWith(Stream(1), Stream(2)) must_== false
+      Stream.startsWith(Stream(1, 2), Stream(2)) must_== false
+      Stream.startsWith(Stream(1, 2), Stream(3, 4)) must_== false
+      Stream.startsWith(Stream(1), Stream(1, 2)) must_== false
+      Stream.startsWith(Stream(1, 2), Stream(1, 2, 3)) must_== false
+      Stream.startsWith(Stream(1), Stream.ones) must_== false
+      Stream.startsWith(Stream(1, 1), Stream.ones) must_== false
+      Stream.startsWith(Stream(1, 2), Stream.ones) must_== false
+    }
+
+    "report true" in {
+      Stream.startsWith(Stream(1), Stream(1)) must_== true
+      Stream.startsWith(Stream(1, 2), Stream(1)) must_== true
+      Stream.startsWith(Stream(1, 2), Stream(1, 2)) must_== true
+      Stream.startsWith(Stream(1, 2, 3), Stream(1, 2)) must_== true
+      Stream.startsWith(Stream(1, 2, 3), Stream(1, 2, 3)) must_== true
+      Stream.startsWith(Stream.ones, Stream(1)) must_== true
+      Stream.startsWith(Stream.ones, Stream(1,1)) must_== true
+    }
+  }
+
 //  "hasSubsequence" should {
 //    import Stream._
 //
