@@ -242,7 +242,7 @@ object Stream {
   }
 
 
-  def hasSubsequence[A](s1: Stream[A], s2: Stream[A]): Boolean = ???
+  def hasSubsequence[A](s1: Stream[A], s2: Stream[A]): Boolean = s1.tails.exists(startsWith(_,s2))
 
   def startsWith[A](s1: Stream[A], s: Stream[A]): Boolean = {
     s1.zipAll(s).takeWhile(!_._2.isEmpty).forAll{case (optionA, optionB) => (optionA, optionB) match {
