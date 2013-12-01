@@ -177,11 +177,30 @@ trait Stream[+A] {
   }
 
   def tails: Stream[Stream[A]] = {
-    unfold(this) { s1 => s1.uncons match {
+    unfold(this) {
+      s1 => s1.uncons match {
         case Some((_, t1)) => Some((s1, t1))
         case _ => None
       }
     }.append(Stream(Stream.empty[A]))
+  }
+
+  def scanRight[B](z: B)(f: (A, => B) => B): Stream[B] = {
+    foldRight((z, Stream(z)))((a, p) => {
+      val b2 = f(a, p._1)
+      (b2, cons(b2, p._2))
+    }) _2
+  }
+
+  def scanRightViaUnfold[B](z: B)(f: (A, => B) => B): Stream[B] = {
+    unfold(this) {
+      s => s.uncons match {
+        case Some((_, t1)) => Some(s.foldRight(z) {
+          (a, b) => f(a, b)
+        }, t1)
+        case _ => None
+      }
+    }.append(Stream(z))
   }
 }
 
@@ -242,12 +261,14 @@ object Stream {
   }
 
 
-  def hasSubsequence[A](s1: Stream[A], s2: Stream[A]): Boolean = s1.tails.exists(startsWith(_,s2))
+  def hasSubsequence[A](s1: Stream[A], s2: Stream[A]): Boolean = s1.tails.exists(startsWith(_, s2))
 
   def startsWith[A](s1: Stream[A], s: Stream[A]): Boolean = {
-    s1.zipAll(s).takeWhile(!_._2.isEmpty).forAll{case (optionA, optionB) => (optionA, optionB) match {
-      case (Some(a), Some(b)) => a == b
-      case _ => false
-    }}
+    s1.zipAll(s).takeWhile(!_._2.isEmpty).forAll {
+      case (optionA, optionB) => (optionA, optionB) match {
+        case (Some(a), Some(b)) => a == b
+        case _ => false
+      }
+    }
   }
 }

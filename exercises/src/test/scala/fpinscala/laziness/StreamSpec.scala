@@ -302,7 +302,7 @@ class StreamSpec extends Specification {
       Stream.startsWith(Stream(1, 2, 3), Stream(1, 2)) must_== true
       Stream.startsWith(Stream(1, 2, 3), Stream(1, 2, 3)) must_== true
       Stream.startsWith(Stream.ones, Stream(1)) must_== true
-      Stream.startsWith(Stream.ones, Stream(1,1)) must_== true
+      Stream.startsWith(Stream.ones, Stream(1, 1)) must_== true
     }
   }
 
@@ -334,6 +334,15 @@ class StreamSpec extends Specification {
       hasSubsequence(Stream(1, 2, 3), Stream(2, 3)) must_== true
       hasSubsequence(Stream(1, 2, 3, 4), Stream(2, 3)) must_== true
       hasSubsequence(Stream.ones, Stream.ones.take(100)) must_== true
+    }
+  }
+
+  "scanRight" should {
+    "" in {
+      Stream(1, 2, 3).scanRight(0)(_ + _).toList must_== List(6, 5, 3, 0)
+      Stream(1, 2, 3).scanRightViaUnfold(0)(_ + _).toList must_== List(6, 5, 3, 0)
+      Stream(1, 2, 3).scanRight(Stream.empty[Int])((a, b) => Stream.cons(a, b)).map(_.toList).toList must_== List(List(1, 2, 3), List(2, 3), List(3), List())
+      Stream(1, 2, 3).scanRightViaUnfold(Stream.empty[Int])((a, b) => Stream.cons(a, b)).map(_.toList).toList must_== List(List(1, 2, 3), List(2, 3), List(3), List())
     }
   }
 
