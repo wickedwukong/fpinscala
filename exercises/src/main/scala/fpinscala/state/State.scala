@@ -28,7 +28,13 @@ object RNG {
       (f(a), rng2)
     }
 
-  def positiveInt(rng: RNG): (Int, RNG) = sys.error("todo")
+  def positiveInt(rng: RNG): (Int, RNG) = {
+    rng.nextInt match {
+      case x@(i, _) if i >= 0 => x
+      case (i, rng) if i < 0 =>  positiveInt(rng)
+      case (i, rng) if i == Int.MinValue => positiveInt(rng)
+    }
+  }
 
   def double(rng: RNG): (Double, RNG) = sys.error("todo")
 
