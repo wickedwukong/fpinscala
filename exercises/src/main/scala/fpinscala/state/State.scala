@@ -36,9 +36,22 @@ object RNG {
     }
   }
 
-  def double(rng: RNG): (Double, RNG) = sys.error("todo")
+  def double(rng: RNG): (Double, RNG) = {
+    def go(value: Double): Double = {
+      val dividedByTen = value / 10
+      if (dividedByTen >= 1) go(dividedByTen) else dividedByTen
+    }
 
-  def intDouble(rng: RNG): ((Int,Double), RNG) = sys.error("todo")
+    val valueAndRNG: (Int, RNG) = RNG.positiveInt(rng)
+    
+    (go(valueAndRNG._1.toDouble), valueAndRNG._2)
+  }
+
+  def intDouble(rng: RNG): ((Int,Double), RNG) = {
+    val intRng: (Int, RNG) = rng.nextInt
+    val doubleRng: (Double, RNG) = double(intRng._2)
+    ((intRng._1, doubleRng._1), doubleRng._2)
+  }
 
   def doubleInt(rng: RNG): ((Double,Int), RNG) = sys.error("todo")
 
