@@ -36,4 +36,15 @@ class RNGSpec extends Specification with ScalaCheck {
       }
     }
   }
+
+  "doubleInt" should {
+    "genereate an int value and a double value between 0 and 1 but not include 1" in {
+      "different seeds" ! check {
+        (seed: Long) => {
+          val value: ((Double, Int), RNG) = RNG.doubleInt(RNG.simple(seed))
+          value._1._1 must (be_>=(0.0) and be_<(1.0))
+        }
+      }
+    }
+  }
 }

@@ -53,7 +53,10 @@ object RNG {
     ((intRng._1, doubleRng._1), doubleRng._2)
   }
 
-  def doubleInt(rng: RNG): ((Double,Int), RNG) = sys.error("todo")
+  def doubleInt(rng: RNG): ((Double,Int), RNG) = {
+    val ((i, d), r) = intDouble(rng)
+    ((d, i), r)
+  }
 
   def double3(rng: RNG): ((Double,Double,Double), RNG) = sys.error("todo")
 
