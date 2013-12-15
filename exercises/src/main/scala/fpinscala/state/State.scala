@@ -65,7 +65,14 @@ object RNG {
     ((d1, d2, d3), r3)
   }
 
-  def ints(count: Int)(rng: RNG): (List[Int], RNG) = sys.error("todo")
+  def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
+    0.until(count).foldLeft((List.empty[Int], rng)){
+      (acc, _) =>{
+        val (i, nextRng) = acc._2.nextInt
+        (i :: acc._1, nextRng)
+      }
+    }
+  }
 
   def positiveMax(n: Int): Rand[Int] = sys.error("todo")
 

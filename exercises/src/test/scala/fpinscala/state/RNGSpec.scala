@@ -48,6 +48,36 @@ class RNGSpec extends Specification with ScalaCheck {
     }
   }
 
+  "ints" should {
+    "genereate 0 ints when the count is 0" in {
+      "different seeds" ! check {
+        (seed: Long) => {
+          val (list, _) = RNG.ints(0)(RNG.simple(seed))
+          list.length must_== (0)
+        }
+      }
+    }
+
+    "genereate 1 int when the count is 1" in {
+      "different seeds" ! check {
+        (seed: Long) => {
+          val (list, _) = RNG.ints(1)(RNG.simple(seed))
+          list.length must_==(1)
+        }
+      }
+    }
+
+    "genereate 2 ints when the count is 2 and they are not equal" in {
+      "different seeds" ! check {
+        (seed: Long) => {
+          val (list, _) = RNG.ints(2)(RNG.simple(seed))
+          list.length must_==(2)
+          list(0) must_!=(list(1))
+        }
+      }
+    }
+  }
+
   "double3" should {
     "genereate a3 different double values between 0 and 1 but not include 1" in {
       "different seeds" ! check {
