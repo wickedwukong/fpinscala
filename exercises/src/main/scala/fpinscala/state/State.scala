@@ -36,6 +36,10 @@ object RNG {
     }
   }
 
+  def doubleViaMap: Rand[Double] = {
+    map(positiveInt)(i => i / (Int.MaxValue.toDouble + 1))
+  }
+
   def double(rng: RNG): (Double, RNG) = {
     def go(value: Double): Double = {
       val dividedByTen = value / 10
