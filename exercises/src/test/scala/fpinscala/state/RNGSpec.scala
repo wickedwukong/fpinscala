@@ -3,6 +3,7 @@ package fpinscala.state
 import org.specs2.mutable.Specification
 import org.specs2.ScalaCheck
 import org.scalacheck._
+import fpinscala.state.RNG.Rand
 
 class RNGSpec extends Specification with ScalaCheck {
 
@@ -112,6 +113,20 @@ class RNGSpec extends Specification with ScalaCheck {
           value._1._1 must_!=(value._1._2)
           value._1._1 must_!=(value._1._3)
           value._1._2 must_!=(value._1._3)
+        }
+      }
+    }
+  }
+
+  "sequence" should {
+    "genereate a3 different double values between 0 and 1 but not include 1" in {
+      "different seeds" ! check {
+        (seed: Long) => {
+          val value: (List[Int], RNG) = RNG.sequence(List[Rand[Int]](rng => rng.nextInt, rng => rng.nextInt))(RNG.simple(seed))
+
+          val listValues = value._1
+          listValues.size must_== 2
+          listValues(0) must_!=(listValues(1))
         }
       }
     }
