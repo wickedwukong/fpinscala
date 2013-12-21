@@ -80,7 +80,13 @@ object RNG {
 
   def positiveMax(n: Int): Rand[Int] = sys.error("todo")
 
-  def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = sys.error("todo")
+  def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
+    rng => {
+      val (a, rngA) = ra(rng)
+      val (b, rngB) = rb(rngA)
+      (f(a, b), rngB)
+    }
+  }
 
   def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = sys.error("todo")
 

@@ -47,6 +47,18 @@ class RNGSpec extends Specification with ScalaCheck {
     }
   }
 
+  "map2 generate intDouble" should {
+    "genereate an int value and a double value between 0 and 1 but not include 1" in {
+      "different seeds" ! check {
+        (seed: Long) => {
+          val value: ((Int, Double), RNG) = RNG.map2(rng => RNG.positiveInt(rng), rng => RNG.double(rng))((i, d) => (i, d))(RNG.simple(seed))
+          value._1._2 must (be_>=(0.0) and be_<(1.0))
+        }
+      }
+    }
+
+  }
+
   "doubleInt" should {
     "genereate an int value and a double value between 0 and 1 but not include 1" in {
       "different seeds" ! check {
