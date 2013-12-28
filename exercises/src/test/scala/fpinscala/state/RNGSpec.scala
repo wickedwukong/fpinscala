@@ -32,6 +32,7 @@ class RNGSpec extends Specification with ScalaCheck {
       "different seeds" ! check {
         (seed: Long) => {
           RNG.doubleViaMap(RNG.simple(seed))._1 must (be_>=(0.0) and be_<(1.0))
+          RNG.doubleViaMapViaFlatMap(RNG.simple(seed))._1 must (be_>=(0.0) and be_<(1.0))
         }
       }
     }
@@ -52,8 +53,11 @@ class RNGSpec extends Specification with ScalaCheck {
     "genereate an int value and a double value between 0 and 1 but not include 1" in {
       "different seeds" ! check {
         (seed: Long) => {
-          val value: ((Int, Double), RNG) = RNG.map2(rng => RNG.positiveInt(rng), rng => RNG.double(rng))((i, d) => (i, d))(RNG.simple(seed))
-          value._1._2 must (be_>=(0.0) and be_<(1.0))
+          val value1: ((Int, Double), RNG) = RNG.map2(rng => RNG.positiveInt(rng), rng => RNG.double(rng))((i, d) => (i, d))(RNG.simple(seed))
+          value1._1._2 must (be_>=(0.0) and be_<(1.0))
+
+          val value2: ((Int, Double), RNG) = RNG.map2ViaFlatmap(rng => RNG.positiveInt(rng), rng => RNG.double(rng))((i, d) => (i, d))(RNG.simple(seed))
+          value2._1._2 must (be_>=(0.0) and be_<(1.0))
         }
       }
     }
@@ -141,5 +145,6 @@ class RNGSpec extends Specification with ScalaCheck {
       }
     }
   }
+
 
 }
