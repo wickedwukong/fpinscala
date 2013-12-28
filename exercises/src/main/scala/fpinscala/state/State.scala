@@ -78,7 +78,13 @@ object RNG {
     }
   }
 
-  def positiveMax(n: Int): Rand[Int] = sys.error("todo")
+ def intsViaSequence(count: Int)(rng: RNG): (List[Int], RNG) = {
+   val f: Rand[Int] = _.nextInt
+   sequence(List.fill(count)(f))(rng)
+ }
+
+
+    def positiveMax(n: Int): Rand[Int] = sys.error("todo")
 
   def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
     rng => {

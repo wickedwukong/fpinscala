@@ -71,12 +71,15 @@ class RNGSpec extends Specification with ScalaCheck {
     }
   }
 
-  "ints" should {
+  "ints intsViaSequence" should {
     "genereate 0 ints when the count is 0" in {
       "different seeds" ! check {
         (seed: Long) => {
-          val (list, _) = RNG.ints(0)(RNG.simple(seed))
-          list.length must_== (0)
+          val (list1, _) = RNG.ints(0)(RNG.simple(seed))
+          list1.length must_== (0)
+
+          val (list2, _) = RNG.intsViaSequence(0)(RNG.simple(seed))
+          list2.length must_== (0)
         }
       }
     }
@@ -84,8 +87,11 @@ class RNGSpec extends Specification with ScalaCheck {
     "genereate 1 int when the count is 1" in {
       "different seeds" ! check {
         (seed: Long) => {
-          val (list, _) = RNG.ints(1)(RNG.simple(seed))
-          list.length must_==(1)
+          val (list1, _) = RNG.ints(1)(RNG.simple(seed))
+          list1.length must_==(1)
+
+          val (list2, _) = RNG.intsViaSequence(1)(RNG.simple(seed))
+          list2.length must_==(1)
         }
       }
     }
@@ -93,9 +99,13 @@ class RNGSpec extends Specification with ScalaCheck {
     "genereate 2 ints when the count is 2 and they are not equal" in {
       "different seeds" ! check {
         (seed: Long) => {
-          val (list, _) = RNG.ints(2)(RNG.simple(seed))
-          list.length must_==(2)
-          list(0) must_!=(list(1))
+          val (list1, _) = RNG.ints(2)(RNG.simple(seed))
+          list1.length must_==(2)
+          list1(0) must_!=(list1(1))
+
+          val (list2, _) = RNG.intsViaSequence(2)(RNG.simple(seed))
+          list2.length must_==(2)
+          list2(0) must_!=(list2(1))
         }
       }
     }
