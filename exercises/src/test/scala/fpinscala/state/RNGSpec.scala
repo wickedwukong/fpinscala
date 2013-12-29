@@ -146,5 +146,17 @@ class RNGSpec extends Specification with ScalaCheck {
     }
   }
 
+  "rollDie" should {
+    "be between 1 and 6 inclusively" in {
+      "different seeds" ! check {
+        (seed: Long) => {
+          val (value, _) = RNG.rollDie(RNG.simple(seed))
+
+          value must (be_>=(1) and be_<=(6))
+        }
+      }
+    }
+  }
+
 
 }

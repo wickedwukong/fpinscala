@@ -95,6 +95,17 @@ object RNG {
   }
 
 
+  def positiveLessThan(n: Int): Rand[Int] =
+    flatMap(positiveInt) { i: Int =>
+      val mod: Int = i % n
+      if (i + (n-1) - mod > 0) (mod, _) else positiveLessThan(n)
+   }
+
+  def rollDie: Rand[Int] = {
+    RNG.map(positiveLessThan(6))(_  + 1)
+  }
+
+
   def positiveMax(n: Int): Rand[Int] = sys.error("todo")
 
   def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
@@ -114,6 +125,7 @@ object RNG {
     }
     val g: ((A, B)) => Rand[C] = (x) => rng => (f(x._1, x._2), rng)
     flatMap(f1)(g)
+
   }
 
   def sequence[A](fs: List[Rand[A]]): Rand[List[A]] =
