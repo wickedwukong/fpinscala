@@ -143,8 +143,12 @@ object RNG {
 }
 
 case class State[S, +A](run: S => (A, S)) {
-  def map[B](f: A => B): State[S, B] =
-    sys.error("todo")
+  def map[B](f: A => B): State[S, B] = {
+      State(s => {
+        val (a, s1) = run(s)
+        (f(a),s1)
+      })
+  }
 
   def map2[B, C](sb: State[S, B])(f: (A, B) => C): State[S, C] =
     sys.error("todo")
