@@ -96,13 +96,14 @@ object RNG {
 
 
   def positiveLessThan(n: Int): Rand[Int] =
-    flatMap(positiveInt) { i: Int =>
-      val mod: Int = i % n
-      if (i + (n-1) - mod > 0) (mod, _) else positiveLessThan(n)
-   }
+    flatMap(positiveInt) {
+      i: Int =>
+        val mod: Int = i % n
+        if (i + (n - 1) - mod > 0) (mod, _) else positiveLessThan(n)
+    }
 
   def rollDie: Rand[Int] = {
-    RNG.map(positiveLessThan(6))(_  + 1)
+    RNG.map(positiveLessThan(6))(_ + 1)
   }
 
 
@@ -146,20 +147,20 @@ object RNG {
 import State._
 
 case class State[S, +A](run: S => (A, S)) {
-  def map[B](f: A => B): State[S, B] = {
+
+  def map[B](f: A => B): State[S, B] =
     flatMap(a => unit(f(a)))
 
+  def map2[B, C](sb: State[S, B])(f: (A, B) => C): State[S, C] = {
+    flatMap(a => sb.map(b => f(a, b)))
   }
 
-  def map2[B, C](sb: State[S, B])(f: (A, B) => C): State[S, C] =
-    sys.error("todo")
-
   def flatMap[B](f: A => State[S, B]): State[S, B] = State(
-        s => {
-          val (a, s1) = run(s)
-          f(a).run(s1)
-        }
-      )
+    s => {
+      val (a, s1) = run(s)
+      f(a).run(s1)
+    }
+  )
 }
 
 sealed trait Input
