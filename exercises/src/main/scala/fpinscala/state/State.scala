@@ -176,5 +176,12 @@ object State {
 
   def unit[S, A](a: A): State[S, A] = State(s => (a, s))
 
+  def sequence[S, A](list: List[State[S, A]]): State[S, List[A]] = {
+    list.foldRight(unit[S, List[A]](List())){
+      (s, acc) => s.map2(acc)(_ :: _)
+    }
+  }
+
+
   def simulateMachine(inputs: List[Input]): State[Machine, Int] = sys.error("todo")
 }
