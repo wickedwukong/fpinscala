@@ -177,11 +177,33 @@ object State {
   def unit[S, A](a: A): State[S, A] = State(s => (a, s))
 
   def sequence[S, A](list: List[State[S, A]]): State[S, List[A]] = {
-    list.foldRight(unit[S, List[A]](List())){
+    list.foldRight(unit[S, List[A]](List())) {
       (s, acc) => s.map2(acc)(_ :: _)
     }
   }
 
+  def modify[S](f: S => S): State[S, Unit] = for {
+    s <- gets // Gets the current state and assigns it to `s`.
+    _ <- sets(f(s)) // Sets the new state to `f` applied to `s`.
+  } yield ()
 
-  def simulateMachine(inputs: List[Input]): State[Machine, Int] = sys.error("todo")
+  def gets[S]: State[S, S] =
+    State(s => (s, s))
+
+  def sets[S](s: S): State[S, Unit] =
+    State(_ => ((), s))
+
+
+  def simulateMachine(inputs: List[Input]): State[Machine, Int] = for {
+    _ <- sequence(inputs.map(i => modify((s: Machine) => (i, s) match {
+      case (_, Machine(_, 0, _)) => s
+      case (Coin, Machine(false, _, _)) => s
+      case (Turn, Machine(true, _, _)) => s
+      case (Coin, Machine(true, candy, coin)) =>
+        Machine(false, candy, coin + 1)
+      case (Turn, Machine(false, candy, coin)) =>
+        Machine(true, candy - 1, coin)
+    })))
+    s <- gets
+  } yield s.coins
 }
