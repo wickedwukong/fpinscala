@@ -182,15 +182,19 @@ object State {
     }
   }
 
-  def modify[S](f: S => S): State[S, Unit] =
+  def modify[S](f: S => S): State[S, Unit] = {
+    //solution 1: use flatMap
+    gets.flatMap(s => sets(f(s)))
 
-    for {
-      s <- gets // Gets the current state and assigns it to `s`.
-      _ <- sets(f(s)) // Sets the new state to `f` applied to `s`.
-    } yield ()
+    //solution 2: use for comprehension
+    // the comprehension is really a syntax sugar for flatMap. the following for comprehension is same as the flatMap above.
 
-  //the for comprehension is really a flatmap. the follwoing flatmap is same as the for comprehension above.
-//  gets.flatMap(s => sets(s))
+//    for {
+//      s <- gets // Gets the current state and assigns it to `s`.
+//      _ <- sets(f(s)) // Sets the new state to `f` applied to `s`.
+//    } yield ()
+  }
+
 
   def gets[S]: State[S, S] =
     State(s => (s, s))
