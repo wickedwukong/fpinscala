@@ -10,13 +10,13 @@ class StateSimulateMachineSpec extends Specification {
     "ignore coin input" in {
       val stateMachine: State[Machine, Int] = State.simulateMachine(List(Coin))
 
-      stateMachine.run(lockedNoCandyMachine) must_==(1, lockedNoCandyMachine)
+      stateMachine.run(lockedNoCandyMachine) must_==(lockedNoCandyMachine.coins, lockedNoCandyMachine)
     }
 
     "ignore turn input" in {
       val stateMachine: State[Machine, Int] = State.simulateMachine(List(Turn))
 
-      stateMachine.run(lockedNoCandyMachine) must_==(1, lockedNoCandyMachine)
+      stateMachine.run(lockedNoCandyMachine) must_==(lockedNoCandyMachine.coins, lockedNoCandyMachine)
     }
   }
   
@@ -26,13 +26,13 @@ class StateSimulateMachineSpec extends Specification {
     "ignore coin input" in {
       val stateMachine: State[Machine, Int] = State.simulateMachine(List(Coin))
 
-      stateMachine.run(unlockedNoCandyMachine) should be(unlockedNoCandyMachine)
+      stateMachine.run(unlockedNoCandyMachine) must_==((unlockedNoCandyMachine.coins, unlockedNoCandyMachine))
     }
 
     "ignore turn input" in {
       val stateMachine: State[Machine, Int] = State.simulateMachine(List(Turn))
 
-      stateMachine.run(unlockedNoCandyMachine) should be(unlockedNoCandyMachine)
+      stateMachine.run(unlockedNoCandyMachine) must_==((unlockedNoCandyMachine.coins, unlockedNoCandyMachine))
     }
   }
 
@@ -42,13 +42,13 @@ class StateSimulateMachineSpec extends Specification {
     "unlock when taking one coin input" in {
       val stateMachine: State[Machine, Int] = State.simulateMachine(List(Coin))
 
-      stateMachine.run(lockedMachine) should be(Machine(false, 1, 2))
+      stateMachine.run(lockedMachine) must_==((2, Machine(false, 1, 2)))
     }
 
     "remain locked when taking one turn input" in {
       val stateMachine: State[Machine, Int] = State.simulateMachine(List(Turn))
 
-      stateMachine.run(lockedMachine) should be(Machine(true, 1, 1))
+      stateMachine.run(lockedMachine) must_==((1, Machine(true, 1, 1)))
     }
   }
 
@@ -57,26 +57,33 @@ class StateSimulateMachineSpec extends Specification {
     "do nothing when taking one coin input" in {
       val stateMachine: State[Machine, Int] = State.simulateMachine(List(Coin))
 
-      stateMachine.run(unlockedMachine) should be(Machine(false, 1, 1))
+      stateMachine.run(unlockedMachine) must_==((1, Machine(false, 1, 1)))
     }
 
     "lock and dispense 1 candy when taking one turn input" in {
       val stateMachine: State[Machine, Int] = State.simulateMachine(List(Turn))
 
-      stateMachine.run(unlockedMachine) should be(Machine(true, 0, 1))
+      stateMachine.run(unlockedMachine) must_==((1, Machine(true, 0, 1)))
     }
   }
 
   "a more comprehensive test" should {
-    "test a few inputs" in {
-      val lockedMachine: Machine = Machine(false, 5, 10)
+    "test a few inputs with a locked machine" in {
+      val lockedMachine: Machine = Machine(true, 5, 10)
 
       val stateMachine: State[Machine, Int] = State.simulateMachine(List(Coin, Turn, Coin, Turn, Coin, Turn, Coin, Turn))
 
-      stateMachine.run(lockedMachine) should be(Machine(true, 1, 14))
+      stateMachine.run(lockedMachine) must_==((14, Machine(true, 1, 14)))
+
+    }
+    
+    "test a few inputs with a unlocked machine" in {
+      val unlockedMachine: Machine = Machine(false, 5, 10)
+
+      val stateMachine: State[Machine, Int] = State.simulateMachine(List(Coin, Turn, Coin, Turn, Coin, Turn, Coin, Turn))
+
+      stateMachine.run(unlockedMachine) must_==((13, Machine(true, 1, 13)))
 
     }
   }
-
-
 }
