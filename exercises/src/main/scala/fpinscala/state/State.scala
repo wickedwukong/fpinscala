@@ -189,10 +189,10 @@ object State {
     //solution 2: use for comprehension
     // the comprehension is really a syntax sugar for flatMap. the following for comprehension is same as the flatMap above.
 
-//    for {
-//      s <- gets // Gets the current state and assigns it to `s`.
-//      _ <- sets(f(s)) // Sets the new state to `f` applied to `s`.
-//    } yield ()
+    //    for {
+    //      s <- gets // Gets the current state and assigns it to `s`.
+    //      _ <- sets(f(s)) // Sets the new state to `f` applied to `s`.
+    //    } yield ()
   }
 
 
@@ -203,8 +203,23 @@ object State {
     State(_ => ((), s))
 
 
-  def simulateMachine(inputs: List[Input]): State[Machine, Int] = for {
-    _ <- sequence(inputs.map(i => modify((s: Machine) => (i, s) match {
+  def simulateMachine(inputs: List[Input]): State[Machine, Int] = {
+    //solution 1: for comprehension
+    //for {
+    //    _ <- sequence(inputs.map(i => modify((s: Machine) => (i, s) match {
+    //      case (_, Machine(_, 0, _)) => s
+    //      case (Coin, Machine(false, _, _)) => s
+    //      case (Turn, Machine(true, _, _)) => s
+    //      case (Coin, Machine(true, candy, coin)) =>
+    //        Machine(false, candy, coin + 1)
+    //      case (Turn, Machine(false, candy, coin)) =>
+    //        Machine(true, candy - 1, coin)
+    //    })))
+    //    s <- gets
+    //  } yield s.coins
+
+    //solution 2: flatMap
+    sequence(inputs.map(i => modify((s: Machine) => (i, s) match {
       case (_, Machine(_, 0, _)) => s
       case (Coin, Machine(false, _, _)) => s
       case (Turn, Machine(true, _, _)) => s
@@ -212,7 +227,9 @@ object State {
         Machine(false, candy, coin + 1)
       case (Turn, Machine(false, candy, coin)) =>
         Machine(true, candy - 1, coin)
-    })))
-    s <- gets
-  } yield s.coins
+    }))).flatMap(_ => gets.map(s => s.coins))
+
+
+  }
+
 }
