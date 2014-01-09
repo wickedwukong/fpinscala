@@ -37,7 +37,7 @@ trait Stream[+A] {
       }
     }
   }
-
+  
   def foldRight[B](z: => B)(f: (A, => B) => B): B =
     uncons match {
       case Some((h, t)) => f(h, t.foldRight(z)(f))
