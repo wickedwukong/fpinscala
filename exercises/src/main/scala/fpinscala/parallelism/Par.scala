@@ -49,6 +49,13 @@ object Par {
 
   class ParOps[A](p: Par[A]) {
 
+    def sequence[A](as: List[Par[A]]): Par[List[A]] = {
+      as.foldRight(unit(List[A]())) {
+        (a, acc) => {
+          map2(a, acc)(_ :: _)
+        }
+      }
+    }
 
   }
 }

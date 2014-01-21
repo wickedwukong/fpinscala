@@ -160,6 +160,9 @@ object Nonblocking {
       def map[B](f: A => B): Par[B] = Par.map(p)(f)
       def map2[B,C](b: Par[B])(f: (A,B) => C): Par[C] = Par.map2(p,b)(f)
       def zip[B](b: Par[B]): Par[(A,B)] = p.map2(b)((_,_))
+      def parMap[A,B](l: List[A])(f: A => B): Par[List[B]] = {
+        sequence(l.map(asyncF(f)))
+      }
     }
   }
 }
