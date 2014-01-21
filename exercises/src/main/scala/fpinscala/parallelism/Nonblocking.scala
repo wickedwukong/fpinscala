@@ -2,6 +2,8 @@ package fpinscala.parallelism
 
 import java.util.concurrent.{Callable, CountDownLatch, ExecutorService}
 import java.util.concurrent.atomic.AtomicReference
+import fpinscala.parallelism.Nonblocking
+import scala.concurrent.Future
 
 object Nonblocking {
 
@@ -69,8 +71,8 @@ object Nonblocking {
     def async[A](a: => A): Par[A] = 
       fork(unit(a))
 
-    def asyncF[A,B](f: A => B): A => Par[B] = 
-      a => async(f(a)) 
+    def asyncF[A,B](f: A => B): A => Par[B] =
+      a => async(f(a))
 
     def sequenceRight[A](as: List[Par[A]]): Par[List[A]] = 
       as match {
@@ -87,8 +89,16 @@ object Nonblocking {
       }
     }
 
-    def sequence[A](as: List[Par[A]]): Par[List[A]] =
-      map(sequenceBalanced(as.toIndexedSeq))(_.toList)
+    def sequence[A](as: List[Par[A]]): Par[List[A]] = {
+      as.foldRight(unit(List[A]())) {
+        (a, acc) => {
+         a.map2(acc)(_ :: _)
+        }
+      }
+    }
+
+
+
 
     // exercise answers
 
