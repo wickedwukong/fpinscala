@@ -75,9 +75,7 @@ object Nonblocking {
       a => async(f(a))
 
     def parFilter[A](l: List[A])(f: A => Boolean): Par[List[A]] = {
-      val map1:List[Par[List[A]]] = l.map(asyncF(a => {if (f(a)) List(a) else List()}))
-
-      map(sequence(map1))(_.flatten)
+      map(sequence(l.map(asyncF(a => if (f(a)) List(a) else List()))))(_.flatten)
     }
 
 
