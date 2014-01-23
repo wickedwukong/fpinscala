@@ -17,6 +17,14 @@ class NonblockingSpec extends Specification {
       actualResultHolder.get() must_== (List(3))
     }
   }
+
+  "parMap" should {
+
+  }
+
+  "sequence" should {
+
+  }
 }
 
 class BlockingThreadExecutor extends AbstractExecutorService{
