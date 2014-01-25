@@ -15,6 +15,10 @@ object Nonblocking {
 
   object Par {
 
+    def parMap[A,B](l: List[A])(f: A => B): Par[List[B]] = {
+      sequence(l.map(asyncF(f)))
+    }
+
     def run[A](es: ExecutorService)(p: Par[A]): A = {
       val ref = new java.util.concurrent.atomic.AtomicReference[A] // A mutable, threadsafe reference, to use for storing the result
       val latch = new CountDownLatch(1) // A latch which, when decremented, implies that `ref` has the result

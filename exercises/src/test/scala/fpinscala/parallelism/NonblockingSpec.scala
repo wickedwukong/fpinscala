@@ -10,7 +10,7 @@ class NonblockingSpec extends Specification {
 
   "parFilter" should {
     "work like a filter" in {
-      val filter: (ExecutorService) => Future[List[Int]] = parFilter(List(1, 2, 3))(_ > 2)
+      val filter: Par[List[Int]] = parFilter(List(1, 2, 3))(_ > 2)
       val actualResultHolder = new java.util.concurrent.atomic.AtomicReference[List[Int]]
       filter.apply(new BlockingThreadExecutor).apply(actualResultHolder.set(_))
 
@@ -19,6 +19,14 @@ class NonblockingSpec extends Specification {
   }
 
   "parMap" should {
+    "map a list" in {
+      val parMapList: Par[List[Int]] = parMap(List(1,2))(_ + 1)
+
+      val actualResultHolder = new java.util.concurrent.atomic.AtomicReference[List[Int]]
+      parMapList.apply(new BlockingThreadExecutor).apply(actualResultHolder.set(_))
+
+      actualResultHolder.get() must_== (List(2, 3))
+    }
 
   }
 
