@@ -31,7 +31,14 @@ class NonblockingSpec extends Specification {
   }
 
   "sequence" should {
+    "" in {
+      val parList: Par[List[Int]] = sequence(List[Par[Int]](unit(1), unit(2)))
 
+      val actualResultHolder = new java.util.concurrent.atomic.AtomicReference[List[Int]]
+      parList(new BlockingThreadExecutor).apply(actualResultHolder.set(_))
+
+      actualResultHolder.get() must_== (List(1, 2))
+    }
   }
 }
 
