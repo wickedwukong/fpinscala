@@ -166,8 +166,8 @@ object Nonblocking {
         chooser(p){ if (_) f else t}
     }
 
-    def choiceNChooser[A](p: Par[Int])(choices: List[Par[A]]): Par[A] =
-      ??? 
+    def choiceNChooser[A](p: Par[Int])(choices: List[Par[A]]): Par[A] = chooser(p)(choices(_))
+    def choiceNViaFlatMap[A](p: Par[Int])(choices: List[Par[A]]): Par[A] = flatMap(p)(choices(_))
 
     def join[A](p: Par[Par[A]]): Par[A] = 
       ???
