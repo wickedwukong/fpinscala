@@ -6,6 +6,7 @@ import fpinscala.parallelism._
 import fpinscala.parallelism.Par.Par
 import Gen._
 import Prop._
+
 import java.util.concurrent.{Executors,ExecutorService}
 
 /*
@@ -22,12 +23,21 @@ object Prop {
 
 object Gen {
   def unit[A](a: => A): Gen[A] = ???
+  def choose(start: Int, stopExclusive: Int): Gen[Int] = {
+    Gen(State(RNG.positiveInt).map(i => start + i % (stopExclusive - start)))
+  }
 }
 
-trait Gen[A] {
+case class Gen[+A](sample: State[RNG,A]) {
   def map[A,B](f: A => B): Gen[B] = ???
   def flatMap[A,B](f: A => Gen[B]): Gen[B] = ???
 }
+
+
+//trait Gen[A] {
+//  def map[A,B](f: A => B): Gen[B] = ???
+//  def flatMap[A,B](f: A => Gen[B]): Gen[B] = ???
+//}
 
 trait SGen[+A] {
 
