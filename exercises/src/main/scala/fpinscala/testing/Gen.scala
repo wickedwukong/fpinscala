@@ -24,7 +24,11 @@ object Prop {
 object Gen {
   def unit[A](a: => A): Gen[A] = ???
   def choose(start: Int, stopExclusive: Int): Gen[Int] = {
-    Gen(State(RNG.positiveInt).map(i => start + i % (stopExclusive - start)))
+    if (start == stopExclusive) {
+      Gen(State(RNG.positiveInt).map(_ => start))
+    } else {
+      Gen(State(RNG.positiveInt).map(i => start + i % (stopExclusive - start)))
+    }
   }
 }
 
