@@ -10,6 +10,17 @@ import fpinscala.state.RNG._
 
 class GenSpec extends Specification with ScalaCheck {
 
+  "unit" should {
+    "always give the value back" in {
+      "different seeds and unit" ! check {
+        (seed: Long, a: Int) => {
+            val (unitValue, _) = Gen.unit(a).sample.run(Simple(seed))
+            unitValue must_== a
+        }
+      }
+    }
+  }
+
   "choose" should {
     "always generate integers between start and stopExclusive" in {
       "different seeds" ! check {
