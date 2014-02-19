@@ -37,10 +37,16 @@ object Gen {
       Gen(State(RNG.positiveInt).map(i => start + i % (stopExclusive - start)))
     }
   }
+
+  def chooseTwo(start: Int, stopExclusive: Int): Gen[(Int, Int)] = {
+    listOfN(2, choose(start, stopExclusive)).map(l => (l.head, l.tail.head))
+  }
 }
 
 case class Gen[+A](sample: State[RNG, A]) {
-  def map[A, B](f: A => B): Gen[B] = ???
+  def map[B](f: A => B): Gen[B] =
+    Gen(sample.map(f))
+
 
   def flatMap[A, B](f: A => Gen[B]): Gen[B] = ???
 }
