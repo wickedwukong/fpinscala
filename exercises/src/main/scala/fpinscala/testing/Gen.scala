@@ -60,6 +60,14 @@ object Gen {
 }
 
 case class Gen[+A](sample: State[RNG, A]) {
+
+
+  def listOfN(size: Gen[Int]): Gen[List[A]] = {
+    import Gen._
+    size.flatMap(n => listOfN(n, this))
+  }
+
+
   def map[B](f: A => B): Gen[B] =
     Gen(sample.map(f))
 
