@@ -41,6 +41,22 @@ object Gen {
   def chooseTwo(start: Int, stopExclusive: Int): Gen[(Int, Int)] = {
     listOfN(2, choose(start, stopExclusive)).map(l => (l.head, l.tail.head))
   }
+
+  def sameParity(from: Int, to: Int): Gen[(Int,Int)] = {
+    for {
+      i <- choose(from, to)
+      j <- if (i%2 == 0) even(from,to) else odd(from,to)
+    } yield(i, j)
+  }
+
+  def even(start: Int, stopExclusive: Int): Gen[Int] =
+    choose(start, if (stopExclusive%2 == 0) stopExclusive - 1 else stopExclusive).
+      map (n => if (n%2 != 0) n+1 else n)
+
+  def odd(start: Int, stopExclusive: Int): Gen[Int] =
+    choose(start, if (stopExclusive%2 != 0) stopExclusive - 1 else stopExclusive).
+      map (n => if (n%2 == 0) n+1 else n)
+
 }
 
 case class Gen[+A](sample: State[RNG, A]) {

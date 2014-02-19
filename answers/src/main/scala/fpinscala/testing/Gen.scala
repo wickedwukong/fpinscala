@@ -190,7 +190,16 @@ object Gen {
     choose(start, if (stopExclusive%2 != 0) stopExclusive - 1 else stopExclusive).
     map (n => if (n%2 == 0) n+1 else n)
 
-  def sameParity(from: Int, to: Int): Gen[(Int,Int)] = for {
+  def sameParity(from: Int, to: Int): Gen[(Int,Int)] =
+  //solution 1 use flatMap and Map
+//  {
+//    choose(from, to).flatMap(i => {
+//      if (i%2 == 0) even(from,to) else odd(from,to)
+//    }.map(j => (i, j)))
+//  }
+
+  //solution 2 used for comprehension
+    for {
     i <- choose(from,to)
     j <- if (i%2 == 0) even(from,to) else odd(from,to)
   } yield (i,j)
