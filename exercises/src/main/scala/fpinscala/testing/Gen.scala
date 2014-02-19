@@ -63,8 +63,7 @@ case class Gen[+A](sample: State[RNG, A]) {
 
 
   def listOfN(size: Gen[Int]): Gen[List[A]] = {
-    import Gen._
-    size.flatMap(n => listOfN(n, this))
+    size.flatMap(n => Gen.listOfN(n, this))
   }
 
 
