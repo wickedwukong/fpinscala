@@ -61,6 +61,9 @@ object Gen {
 
 case class Gen[+A](sample: State[RNG, A]) {
 
+  def union(g1: Gen[A], g2: Gen[A]) : Gen[A] = {
+    Gen.boolean.flatMap(b => if (b) g1 else g2)
+  }
 
   def listOfN(size: Gen[Int]): Gen[List[A]] = {
     size.flatMap(n => Gen.listOfN(n, this))
