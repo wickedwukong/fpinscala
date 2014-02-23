@@ -14,11 +14,42 @@ The library developed in this chapter goes through several iterations. This file
 shell, which you can fill in and modify while working through the chapter.
 */
 
-trait Prop {
-}
+
+
+case class Prop(run: (TestCases,RNG) => Result)
 
 object Prop {
-  def forAll[A](gen: Gen[A])(f: A => Boolean): Prop = ???
+  type TestCases = Int
+  type SuccessCount = Int
+  type FailedCase = String
+
+  type Result = Option[(FailedCase, SuccessCount)]
+  
+  def randomStream[A](gen: Gen[A])(rng: RNG): Stream[A] = {
+    Stream.unfold(rng)(rng => Some(gen.sample.run(rng)))
+  }
+
+  def forAll[A](gen: Gen[A])(f: A => Boolean): Prop = {
+
+    val g: (TestCases, RNG) => Result = {
+      (testCase, rng) => {
+        randomStream(gen)(rng).zip(Stream.from(0)).take(testCase).map{
+          case (a, i) => {
+            try {
+              if (f(a)) None else Some((a.toString, i))
+            } catch { case e: Exception => Some((buildMsg(a, e), i)) }
+          }
+        }.find(_.isDefined).getOrElse(None)
+      }
+    }
+
+    Prop(g)
+  }
+
+  def buildMsg[A](s: A, e: Exception): String =
+    s"test case: $s\n" +
+      s"generated an exception: ${e.getMessage}\n" +
+      s"stack trace:\n ${e.getStackTrace.mkString("\n")}"
 }
 
 object Gen {
@@ -49,6 +80,12 @@ object Gen {
     } yield(i, j)
   }
 
+
+    def union[A](g1: Gen[A], g2: Gen[A]) : Gen[A] = {
+      Gen.boolean.flatMap(b => if (b) g1 else g2)
+    }
+
+
   def even(start: Int, stopExclusive: Int): Gen[Int] =
     choose(start, if (stopExclusive%2 == 0) stopExclusive - 1 else stopExclusive).
       map (n => if (n%2 != 0) n+1 else n)
@@ -60,10 +97,6 @@ object Gen {
 }
 
 case class Gen[+A](sample: State[RNG, A]) {
-
-  def union(g1: Gen[A], g2: Gen[A]) : Gen[A] = {
-    Gen.boolean.flatMap(b => if (b) g1 else g2)
-  }
 
   def listOfN(size: Gen[Int]): Gen[List[A]] = {
     size.flatMap(n => Gen.listOfN(n, this))
