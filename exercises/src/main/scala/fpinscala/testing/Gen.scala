@@ -16,7 +16,13 @@ shell, which you can fill in and modify while working through the chapter.
 
 
 
-case class Prop(run: (TestCases,RNG) => Result)
+case class Prop(run: (TestCases,RNG) => Result) {
+  def &&(p: Prop): Prop = {
+    Prop((n, rng) => {
+      run(n, rng) orElse(p.run(n, rng))
+    })
+  }
+}
 
 object Prop {
   type TestCases = Int
