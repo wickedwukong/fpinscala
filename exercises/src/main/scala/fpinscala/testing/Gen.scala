@@ -22,6 +22,12 @@ case class Prop(run: (TestCases,RNG) => Result) {
       run(n, rng) orElse(p.run(n, rng))
     })
   }
+
+  def ||(p: Prop): Prop = {
+    Prop((n, rng) => {
+      run(n, rng).flatMap(_ => p.run(n, rng))
+    })
+  }
 }
 
 object Prop {
