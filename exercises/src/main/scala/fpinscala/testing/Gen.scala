@@ -64,6 +64,10 @@ object Prop {
 }
 
 object Gen {
+  def listOf[A](g: Gen[A]): SGen[List[A]] = {
+      SGen(n => listOfN(n, g))
+  }
+
   def unit[A](a: => A): Gen[A] = Gen(State(rng => (a, rng)))
 
   def boolean: Gen[Boolean] = Gen(State(RNG.positiveInt).map(i => i % 2 == 0))
