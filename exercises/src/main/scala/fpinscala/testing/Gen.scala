@@ -15,7 +15,6 @@ shell, which you can fill in and modify while working through the chapter.
 */
 
 
-
 case class Prop(run: (TestCases,RNG) => Result) {
   def &&(p: Prop): Prop = {
     Prop((n, rng) => {
@@ -110,6 +109,10 @@ object Gen {
 
 case class Gen[+A](sample: State[RNG, A]) {
 
+  def unsize: SGen[A] = {
+    SGen(_ => this)
+  }
+
   def listOfN(size: Gen[Int]): Gen[List[A]] = {
     size.flatMap(n => Gen.listOfN(n, this))
   }
@@ -130,7 +133,5 @@ case class Gen[+A](sample: State[RNG, A]) {
 //  def flatMap[A,B](f: A => Gen[B]): Gen[B] = ???
 //}
 
-trait SGen[+A] {
-
-}
+case class SGen[+A](forSize: Int => Gen[A])
 
