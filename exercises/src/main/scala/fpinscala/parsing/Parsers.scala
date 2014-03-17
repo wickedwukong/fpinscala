@@ -26,19 +26,16 @@ def run[A](p: Parser[A])(input: String): Either[String ,A]
     if (n <= 0) succeed(List())
     else map2(p, listOfN(n-1, p))(_ :: _)
 
-  def many[A](p: Parser[A]): Parser[List[A]] =
-    map2(p, many(p))(_ :: _) or succeed(List())
+  def many[A](p: Parser[A]): Parser[List[A]]
 
   def or[A](p1: Parser[A], p2: => Parser[A]): Parser[A]
 
   def flatMap[A,B](p: Parser[A])(f: A => Parser[B]): Parser[B]
 
 
-  def map2[A,B,C](p: Parser[A], p2: => Parser[B])(f: (A,B) => C): Parser[C] =
-    for { a <- p; b <- p2 } yield f(a,b)
+  def map2[A,B,C](p: Parser[A], p2: => Parser[B])(f: (A,B) => C): Parser[C]
 
-  def map[A,B](a: Parser[A])(f: A => B): Parser[B] =
-    flatMap(a)(f andThen succeed)
+  def map[A,B](a: Parser[A])(f: A => B): Parser[B]
 
 
 
@@ -48,6 +45,8 @@ def run[A](p: Parser[A])(input: String): Either[String ,A]
 
     def map[B](f: A => B): Parser[B] = self.map(p)(f)
     def many = self.many(p)
+
+    val numA: Parser[Int] = char('a').many.map(_.size)
 
     def flatMap[B](f: A => Parser[B]): Parser[B] =
       self.flatMap(p)(f)
