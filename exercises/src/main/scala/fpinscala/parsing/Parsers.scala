@@ -15,8 +15,7 @@ def run[A](p: Parser[A])(input: String): Either[String ,A]
 
   def char(c: Char): Parser[Char] = string(c.toString) map (_.charAt(0))
 
-  def succeed[A](a: A): Parser[A] =
-    string("") map (_ => a)
+  def succeed[A](a: A): Parser[A] = string("") map (_ => a)
 
   def many1[A](p: Parser[A]): Parser[List[A]] =
     map2(p, many(p))(_ :: _)
