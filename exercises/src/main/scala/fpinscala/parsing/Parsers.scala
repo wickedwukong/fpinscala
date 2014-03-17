@@ -13,8 +13,7 @@ def run[A](p: Parser[A])(input: String): Either[String ,A]
   implicit def asStringParser[A](a: A)(implicit f: A => Parser[String]):
   ParserOps[String] = ParserOps(f(a))
 
-  def char(c: Char): Parser[Char] =
-    string(c.toString) map (_.charAt(0))
+  def char(c: Char): Parser[Char] = string(c.toString) map (_.charAt(0))
 
   def succeed[A](a: A): Parser[A] =
     string("") map (_ => a)
