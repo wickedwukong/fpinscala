@@ -1,7 +1,10 @@
 package fpinscala.monoids
 
 import fpinscala.parallelism.Nonblocking._
-import fpinscala.parallelism.Nonblocking.Par.toParOps // infix syntax for `Par.map`, `Par.flatMap`, etc
+import fpinscala.parallelism.Nonblocking.Par.toParOps
+import fpinscala.monoids
+
+// infix syntax for `Par.map`, `Par.flatMap`, etc
 
 trait Monoid[A] {
   def op(a1: A, a2: A): A
@@ -20,13 +23,32 @@ object Monoid {
     val zero = Nil
   }
 
-  val intAddition: Monoid[Int] = sys.error("todo")
+  val intAddition: Monoid[Int] = new Monoid[Int] {
+    def op(a1: Int, a2: Int) = a1 + a2
 
-  val intMultiplication: Monoid[Int] = sys.error("todo")
+    def zero = 0
+  }
 
-  val booleanOr: Monoid[Boolean] = sys.error("todo")
+  val intMultiplication: Monoid[Int] = new Monoid[Int] {
+    def op(a1: Int, a2: Int) = a1 * a2
 
-  val booleanAnd: Monoid[Boolean] = sys.error("todo")
+    def zero = 1
+  }
+
+
+  val booleanOr: Monoid[Boolean] = new Monoid[Boolean] {
+    def op(a1: Boolean, a2: Boolean) = a1 || a2
+
+    def zero = false
+  }
+
+
+  val booleanAnd: Monoid[Boolean] = new Monoid[Boolean] {
+    def op(a1: Boolean, a2: Boolean) = a1 && a2
+
+    def zero = true
+  }
+
 
   def optionMonoid[A]: Monoid[Option[A]] = sys.error("todo")
 
@@ -73,7 +95,12 @@ object Monoid {
   def parFoldMap[A,B](v: IndexedSeq[A], m: Monoid[B])(f: A => B): Par[B] = 
     sys.error("todo") 
 
-  val wcMonoid: Monoid[WC] = sys.error("todo")
+  val wcMonoid: Monoid[WC] = new Monoid[WC] {
+    def op(a1: WC, a2: WC) = Stub("lbah")
+
+    def zero = Stub("lbah")
+  }
+
 
   def count(s: String): Int = sys.error("todo")
 
