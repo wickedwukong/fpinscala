@@ -74,7 +74,11 @@ object Monoid {
   import Prop._
   def monoidLaws[A](m: Monoid[A], gen: Gen[A]): Prop = sys.error("todo")
 
-  def trimMonoid(s: String): Monoid[String] = sys.error("todo")
+  def trimMonoid: Monoid[String] = new Monoid[String] {
+    def op(a: String, b: String) = (a.trim + " " + b.trim).trim
+    val zero = ""
+  }
+
 
   def concatenate[A](as: List[A], m: Monoid[A]): A =
     sys.error("todo")

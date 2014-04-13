@@ -36,4 +36,28 @@ class MonoidSpec extends Specification {
       endoMonoid.op((a: String) => "hello", endoMonoid.zero)("whatever") must_== "hello"
     }
   }
+
+  "trimMonoid" should {
+    "insert space between words" in {
+      trimMonoid.op("abc", "cde") must_== "abc cde"
+    }
+
+    "does not insert space between two words if there are already one" in {
+      trimMonoid.op("abc", " cde") must_== "abc cde"
+    }
+
+    "trim spaces" in {
+      trimMonoid.op(" abc", " cde ") must_== "abc cde"
+    }
+
+    "follow monoid associative laws" in {
+      trimMonoid.op("abc", trimMonoid.op("cde", "efg")) must_== trimMonoid.op(trimMonoid.op("abc", "cde"), "efg")
+    }
+
+    "zero law" in {
+      trimMonoid.op("abc", trimMonoid.zero) must_== "abc"
+      trimMonoid.op(trimMonoid.zero, "abc") must_== "abc"
+    }
+  }
+
 }
