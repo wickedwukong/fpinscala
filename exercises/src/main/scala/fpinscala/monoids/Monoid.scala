@@ -63,6 +63,12 @@ object Monoid {
 
   }
 
+  def dual[A](m: Monoid[A]) = new Monoid[A] {
+    override def zero: A = m.zero
+
+    override def op(a1: A, a2: A): A = m.op(a2, a1)
+  }
+
   // TODO: Placeholder for `Prop`. Remove once you have implemented the `Prop`
   // data type from Part 2.
   trait Prop {}
@@ -91,7 +97,7 @@ object Monoid {
     foldMap(as, endoMonoid[B])(f.curried)(z)
 
   def foldLeft[A, B](as: List[A])(z: B)(f: (B, A) => B): B =
-    sys.error("todo")
+    foldMap(as, dual(endoMonoid[B]))(a => b => f(b,a))(z)
 
   def foldMapV[A, B](as: IndexedSeq[A], m: Monoid[B])(f: A => B): B =
     sys.error("todo")
