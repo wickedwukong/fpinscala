@@ -60,4 +60,33 @@ class MonoidSpec extends Specification {
     }
   }
 
+  "order" should {
+    "give true for a seq in asc order" in {
+      ordered(IndexedSeq()) must_== true
+      ordered(IndexedSeq(1)) must_== true
+      ordered(IndexedSeq(1, 2)) must_== true
+      ordered(IndexedSeq(1, 2, 3)) must_== true
+    }
+
+    "give false for a seq in desc order" in {
+      ordered(IndexedSeq(2, 1)) must_== false
+      ordered(IndexedSeq(3, 2, 1)) must_== false
+      ordered(IndexedSeq(-1, 1, -1)) must_== false
+    }
+  }
+
+  "order2" should {
+    "give true for a seq in asc order" in {
+      ordered(IndexedSeq()) must_== true
+      ordered2(IndexedSeq(1)) must_== true
+      ordered2(IndexedSeq(1, 2)) must_== true
+      ordered2(IndexedSeq(1, 2, 3)) must_== true
+    }
+
+    "give false for a seq in desc order" in {
+      ordered2(IndexedSeq(2, 1)) must_== false
+      ordered2(IndexedSeq(3, 2, 1)) must_== false
+      ordered2(IndexedSeq(-1, 1, -1)) must_== false
+    }
+  }
 }
