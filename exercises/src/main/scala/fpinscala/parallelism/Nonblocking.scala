@@ -19,6 +19,9 @@ object Nonblocking {
       sequence(l.map(asyncF(f)))
     }
 
+    def parMap[A,B](as: IndexedSeq[A])(f: A => B): Par[IndexedSeq[B]] =
+      sequenceBalanced(as.map(asyncF(f)))
+
     def run[A](es: ExecutorService)(p: Par[A]): A = {
       val ref = new java.util.concurrent.atomic.AtomicReference[A] // A mutable, threadsafe reference, to use for storing the result
       val latch = new CountDownLatch(1) // A latch which, when decremented, implies that `ref` has the result
@@ -210,6 +213,8 @@ object Nonblocking {
       def map2[B, C](b: Par[B])(f: (A, B) => C): Par[C] = Par.map2(p, b)(f)
 
       def zip[B](b: Par[B]): Par[(A, B)] = p.map2(b)((_, _))
+
+      def flatMap[B](f: A => Par[B]): Par[B] = Par.flatMap(p)(f)
 
       def parMap[A, B](l: List[A])(f: A => B): Par[List[B]] = {
         sequence(l.map(asyncF(f)))

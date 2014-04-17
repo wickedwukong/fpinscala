@@ -125,8 +125,11 @@ object Monoid {
   }
 
 
-  def parFoldMap[A,B](v: IndexedSeq[A], m: Monoid[B])(f: A => B): Par[B] = 
-    sys.error("todo") 
+  def parFoldMap[A,B](as: IndexedSeq[A], m: Monoid[B])(f: A => B): Par[B] =
+    Par.parMap(as)(f).flatMap(
+      bs =>
+        foldMapV(bs, par(m))(b => Par.async(b))
+    )
 
   val wcMonoid: Monoid[WC] = new Monoid[WC] {
     def op(a1: WC, a2: WC) = Stub("lbah")
