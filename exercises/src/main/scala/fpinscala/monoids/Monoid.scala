@@ -140,7 +140,7 @@ object Monoid {
         (a1, a2) match {
           case (None, x) => x
           case (y, None) => y
-          case (Some((x1, y1, b1)), Some((x2, y2, b2))) => Some((x1 min x2, y1 max y2, b1 && b2 && (y1 <= y2)))
+          case (Some((x1, y1, b1)), Some((x2, y2, b2))) => Some((x1 min x2, y1 max y2, b1 && b2 && (y1 <= x2)))
         }
       }
     }
@@ -167,13 +167,37 @@ object Monoid {
     )
 
   val wcMonoid: Monoid[WC] = new Monoid[WC] {
-    def op(a1: WC, a2: WC) = Stub("lbah")
+    def op(a: WC, b: WC) = (a, b) match {
+      case (Stub(c), Stub(d)) => Stub(c + d)
+      case (Stub(c), Part(l, w, r)) => Part(c + l, w, r)
+      case (Part(l, w, r), Stub(c)) => Part(l, w, r + c)
+      case (Part(l1, w1, r1), Part(l2, w2, r2)) =>
+        Part(l1, w1 + (if ((r1 + l2).isEmpty) 0 else 1) + w2, r2)
+    }
 
-    def zero = Stub("lbah")
+
+    def zero = Stub("")
   }
 
 
-  def count(s: String): Int = sys.error("todo")
+  def count(s: String): Int = {
+    // A single character's count. Whitespace does not count,
+    // and non-whitespace starts a new Stub.
+    def wc(c: Char): WC =
+      if (c.isWhitespace)
+        Part("", 0, "")
+      else
+        Stub(c.toString)
+    // `unstub(s)` is 0 if `s` is empty, otherwise 1.
+    def unstub(s: String) = s.length min 1
+
+    val v: WC = foldMapV(s.toIndexedSeq, wcMonoid)(wc)
+
+    v match {
+      case Stub(s) => unstub(s)
+      case Part(l, w, r) => unstub(l) + w + unstub(r)
+    }
+  }
 
   def productMonoid[A,B](A: Monoid[A], B: Monoid[B]): Monoid[(A, B)] =
     sys.error("todo")

@@ -72,8 +72,8 @@ class MonoidSpec extends Specification {
       ordered(IndexedSeq(2, 1)) must_== false
       ordered(IndexedSeq(3, 2, 1)) must_== false
       ordered(IndexedSeq(1, 2, 4, 3)) must_== false
-//      ordered(IndexedSeq(1, 3, 2, 3)) must_== false
-//      ordered(IndexedSeq(-1, 1, -1)) must_== false
+      ordered(IndexedSeq(1, 3, 2, 3)) must_== false
+      ordered(IndexedSeq(-1, 1, -1)) must_== false
     }
   }
 
@@ -91,6 +91,31 @@ class MonoidSpec extends Specification {
       ordered2(IndexedSeq(1, 2, 4, 3)) must_== false
       ordered2(IndexedSeq(1, 3, 2, 3)) must_== false
       ordered2(IndexedSeq(-1, 1, -1)) must_== false
+    }
+  }
+
+  "count" should {
+    "count words" in {
+      count("") must_== 0
+      count("a") must_== 1
+      count(" a") must_== 1
+      count("a ") must_== 1
+      count(" a ") must_== 1
+      count("a b") must_== 2
+      count(" a b") must_== 2
+      count("a b ") must_== 2
+      count(" a b ") must_== 2
+      count(" a bc") must_== 2
+      count("ab c") must_== 2
+      count("ab cd") must_== 2
+      count("ab cd ") must_== 2
+      count("ab   cd ") must_== 2
+      count("ab cd ef") must_== 3
+      count("ab cd ef gh") must_== 4
+      count("ab cd ef gh ij") must_== 5
+      count("ab cd ef gh ij ") must_== 5
+      count(" ab cd ef gh ij ") must_== 5
+      count(" ab cd    ef gh ij ") must_== 5
     }
   }
 }
