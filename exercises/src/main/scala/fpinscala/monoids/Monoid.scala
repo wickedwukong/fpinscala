@@ -213,8 +213,15 @@ object Monoid {
     override def op(a1: (A) => B, a2: (A) => B) = a => B.op(a1(a), a2(a))
   }
 
-  def mapMergeMonoid[K,V](V: Monoid[V]): Monoid[Map[K, V]] =
-    sys.error("todo")
+  def mapMergeMonoid[K,V](V: Monoid[V]): Monoid[Map[K, V]] = new Monoid[Map[K, V]] {
+    override def zero = Map()
+
+    override def op(a1: Map[K, V], a2: Map[K, V]) = {
+      a1.map{
+        case (k1, v1) => (k1, V.op(v1, a2.get(k1) getOrElse(V.zero)))
+      }
+    }
+  }
 
   def bag[A](as: IndexedSeq[A]): Map[A, Int] =
     sys.error("todo")
