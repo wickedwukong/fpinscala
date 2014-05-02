@@ -133,20 +133,21 @@ object Monoid {
 
   def ordered(ints: IndexedSeq[Int]): Boolean = {
 
-    val m: Monoid[Option[(Int, Boolean)]] = new Monoid[Option[(Int, Boolean)]]{
-      def zero: Option[(Int, Boolean)] = None
+    val m: Monoid[Option[(Int, Int, Boolean)]] = new Monoid[Option[(Int, Int, Boolean)]]{
+      def zero: Option[(Int, Int, Boolean)] = None
 
-      override def op(a1: Option[(Int, Boolean)], a2: Option[(Int, Boolean)]): Option[(Int, Boolean)] = {
+      override def op(a1: Option[(Int, Int, Boolean)], a2: Option[(Int, Int, Boolean)]): Option[(Int, Int, Boolean)] = {
         (a1, a2) match {
-          case (None, _) => None
-          case (Some((x1, b1)), Some((x2, b2))) => Some((x2, b1 && (x1 <= x2)))
+          case (None, x) => x
+          case (y, None) => y
+          case (Some((x1, y1, b1)), Some((x2, y2, b2))) => Some((x1 min x2, y1 max y2, b1 && b2 && (y1 <= y2)))
         }
       }
     }
 
     foldMapV(ints, m)(a => {
-      Some((a, true))
-    }).map(_._2).getOrElse(true)
+      Some((a, a, true))
+    }).map(_._3).getOrElse(true)
   }
 
   sealed trait WC

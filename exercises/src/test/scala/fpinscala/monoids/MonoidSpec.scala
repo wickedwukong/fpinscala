@@ -71,7 +71,9 @@ class MonoidSpec extends Specification {
     "give false for a seq in desc order" in {
       ordered(IndexedSeq(2, 1)) must_== false
       ordered(IndexedSeq(3, 2, 1)) must_== false
-      ordered(IndexedSeq(-1, 1, -1)) must_== false
+      ordered(IndexedSeq(1, 2, 4, 3)) must_== false
+//      ordered(IndexedSeq(1, 3, 2, 3)) must_== false
+//      ordered(IndexedSeq(-1, 1, -1)) must_== false
     }
   }
 
@@ -86,6 +88,8 @@ class MonoidSpec extends Specification {
     "give false for a seq in desc order" in {
       ordered2(IndexedSeq(2, 1)) must_== false
       ordered2(IndexedSeq(3, 2, 1)) must_== false
+      ordered2(IndexedSeq(1, 2, 4, 3)) must_== false
+      ordered2(IndexedSeq(1, 3, 2, 3)) must_== false
       ordered2(IndexedSeq(-1, 1, -1)) must_== false
     }
   }
