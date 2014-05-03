@@ -217,14 +217,18 @@ object Monoid {
     override def zero = Map()
 
     override def op(a1: Map[K, V], a2: Map[K, V]) = {
-      a1.map{
+      val x = a1.map{
         case (k1, v1) => (k1, V.op(v1, a2.get(k1) getOrElse(V.zero)))
       }
+
+      val a2ExcludingA1 = a2.filter{case (k2, v2) => x.contains(k2) == false}
+      x ++ a2ExcludingA1
     }
   }
 
-  def bag[A](as: IndexedSeq[A]): Map[A, Int] =
-    sys.error("todo")
+  def bag[A](as: IndexedSeq[A]): Map[A, Int] = {
+    foldMapV(as, mapMergeMonoid[A, Int](intAddition))(a => Map(a -> 1))
+  }
 }
 
 trait Foldable[F[_]] {

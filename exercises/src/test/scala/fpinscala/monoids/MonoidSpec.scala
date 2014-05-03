@@ -118,4 +118,13 @@ class MonoidSpec extends Specification {
       count(" ab cd    ef gh ij ") must_== 5
     }
   }
+
+  "bag" should {
+    "count the number of apperance of each item" in {
+      bag(Vector()) must_== Map()
+      bag(Vector("a")) must_== Map("a" -> 1)
+      bag(Vector("a", "a")) must_== Map("a" -> 2)
+      bag(Vector("a", "rose", "is", "a", "rose")) must_== Map("a" -> 2, "rose" -> 2, "is" -> 1)
+    }
+  }
 }
