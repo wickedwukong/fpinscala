@@ -6,6 +6,7 @@ import testing._
 import parallelism._
 import state._
 import parallelism.Par._
+import fpinscala.monads
 
 trait Functor[F[_]] {
   def map[A,B](fa: F[A])(f: A => B): F[B]
@@ -30,7 +31,11 @@ trait Monad[M[_]] extends Functor[M] {
   def map2[A,B,C](ma: M[A], mb: M[B])(f: (A, B) => C): M[C] =
     flatMap(ma)(a => map(mb)(b => f(a, b)))
 
-  def sequence[A](lma: List[M[A]]): M[List[A]] = ???
+  def sequence[A](lma: List[M[A]]): M[List[A]] = {
+    lma.foldRight(unit(List[A]())){
+      (ma, acc) => map2(ma, acc)((a, list) => a :: list)
+    }
+  }
 
   def traverse[A,B](la: List[A])(f: A => M[B]): M[List[B]] = ???
 
@@ -64,7 +69,10 @@ object Monad {
 
   }
 
-  def parserMonad[P[+_]](p: Parsers[P]): Monad[P] = ???
+  def parserMonad[P[+_]](p: Parsers[P]): Monad[P] = new Monad[P] {
+    def unit[A](a: => A) = p.succeed(a)
+    override def flatMap[A,B](ma: P[A])(f: A => P[B]) = p.flatMap(ma)(f)
+  }
 
   val optionMonad: Monad[Option] = ???
 
