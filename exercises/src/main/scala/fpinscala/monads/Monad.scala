@@ -54,6 +54,16 @@ trait Monad[M[_]] extends Functor[M] {
 
   def flatMap[A,B](ma: M[A])(f: A => M[B]): M[B] = ???
 
+  def filterM[A](ms: List[A])(f: A => M[Boolean]): M[List[A]] = {
+    ms match {
+      case Nil => unit(ms)
+      case head :: tail => flatMap(f(head))(b => {
+        if (!b) filterM(tail)(f)
+        else map(filterM(tail)(f))(l => head :: l)
+      })
+    }
+  }
+
 }
 
 case class Reader[R, A](run: R => A)
