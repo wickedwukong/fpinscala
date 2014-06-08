@@ -29,7 +29,7 @@ trait Monad[M[_]] extends Functor[M] {
   def map[A,B](ma: M[A])(f: A => B): M[B] =
     flatMap(ma)(a => unit(f(a)))
   def map2[A,B,C](ma: M[A], mb: M[B])(f: (A, B) => C): M[C] =
-    flatMap(ma)(a => map(mb)(b => f(a, b)))
+    flatMap(ma)(a => map(mb)(b => f(a, b))) 
 
   def sequence[A](lma: List[M[A]]): M[List[A]] = {
     lma.foldRight(unit(List[A]())){
@@ -50,7 +50,10 @@ trait Monad[M[_]] extends Functor[M] {
   }
 
   // Implement in terms of `compose`:
-  def _flatMap[A,B](ma: M[A])(f: A => M[B]): M[B] = ???
+  def _flatMap[A,B](ma: M[A])(f: A => M[B]): M[B] = {
+      val g: A => M[A] = a => unit(a)
+      compose((_:Unit) => ma, f)(())
+  }
 
   def join[A](mma: M[M[A]]): M[A] = ???
 
