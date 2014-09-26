@@ -103,7 +103,12 @@ object Monad {
 
   val listMonad: Monad[List] = ???
 
-  def stateMonad[S] = ???
+  def stateMonad[S] = new Monad[({type f[x] = State[S, x]})#f] {
+    def unit[A](a: => A): State[S, A] = State(s => (a, s))
+
+    override def flatMap[A, B](st: State[S, A])(f: A => State[S, B]): State[S, B] =
+      st flatMap f
+  }
 
   val idMonad: Monad[Id] = ???
 
@@ -112,6 +117,7 @@ object Monad {
 
 case class Id[A](value: A) {
   def map[B](f: A => B): Id[B] = Id(f(value))
+
   def flatMap[B](f: A => Id[B]): Id[B] = f(value)
 }
 
